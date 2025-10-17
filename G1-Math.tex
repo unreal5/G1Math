@@ -319,25 +319,33 @@ b=\dfrac{2n-m}{3}
 \begin{exer}
 $已知x，y>0，且x+2y+\sqrt{xy}=2，求x+3y的最大值。$
 \end{exer}
-\begin{flalign*}
-&利用基本不等式可知：\sqrt{xy}\le\dfrac{x+y}{2}，原式变为：2\le x+2y+\dfrac{x+y}{2}&\\
-&此时对比题目要求的结果是x+3y。\\
-&思考：如何才能让 x+2y+\dfrac{x+y}{2}（通过某种变换）\rightarrow\quad x+3y?\\
-&显然\dfrac{x+y}{2}中，分子x，y前面有某种系数就可以。\\
-&但是的x+y是由\sqrt{xy}得来的，这是题目给出的条件，我们无法修改，我们应该如何做？\\
-&没办法改变条件，但可以对条件进行变形，利用a\times\dfrac{1}{a}的特性，把\sqrt{xy}\rightarrow\sqrt{(a\cdot x) \times\dfrac{y}{a}}\\
-&由基本不等式得：\sqrt{(ax) \times\dfrac{y}{a}}\le\dfrac{ax+\dfrac{y}{a}}{2}\\
-&现在的问题就变成如何求出a的值。\\
-&原式：2\le x+2y +\dfrac{ax+\dfrac{y}{a}}{2}=(\dfrac{a}{2}+1)x+(2+\dfrac{1}{2a})y\\
-&对比要求的结果：x+3y，\therefore 系数比：x:y=1:3\\
-&\therefore \dfrac{\dfrac{a}{2}+1}{2+\dfrac{1}{2a}}=\dfrac{1}{3}\iff 3a^2+2a-1=0\\
-&解得：a=\begin{cases}
+\kaishu
+利用基本不等式可知：$\sqrt{xy}\le\dfrac{x+y}{2}$，原式变为：$2\le x+2y+\dfrac{x+y}{2}$。
+
+此时对比题目要求的结果是x+3y。思考：如何才能让 $x+2y+\dfrac{x+y}{2}$（通过某种变换）$\rightarrow\quad x+3y?$显然$\dfrac{x+y}{2}$中，分子x，y前面有某种系数就可以。
+
+但是的$x+y$是由$\sqrt{xy}$得来的，这是题目给出的条件，我们无法修改，我们应该如何做？
+
+没办法改变条件，但可以对条件进行变形，利用$a\times\dfrac{1}{a}$的特性，把$\sqrt{xy}\rightarrow\sqrt{(a\cdot x) \times\dfrac{y}{a}}$； 由基本不等式得：$\sqrt{(ax) \times\dfrac{y}{a}}\le\dfrac{ax+\dfrac{y}{a}}{2}$
+
+现在的问题就变成如何求出a的值。
+
+原式变形为：$2=x+2y+\sqrt{(ax) \times\dfrac{y}{a}}\le x+2y +\dfrac{ax+\dfrac{y}{a}}{2}=(\dfrac{a}{2}+1)x+(2+\dfrac{1}{2a})y$
+对比要求的结果：$x+3y$，$x,y的系数比1:3$
+
+$\therefore \dfrac{\dfrac{a}{2}+1}{2+\dfrac{1}{2a}}=\dfrac{1}{3}\iff 3a^2+2a-1=0$
+
+解得：$a=\begin{cases}
 \dfrac{1}{3}\\
 -\dfrac{4}{3}
-\end{cases}\\
-&其实这二个解均可使用，但对于基本不等式，如果配的系数为负数，不满足使用条件，麻烦，取\dfrac{1}{3}即可。\\
-&\therefore 2= x+2y+\sqrt{(\dfrac{1}{3}x)\times\dfrac{y}{\frac{1}{3}}}=x+2y+\sqrt{\dfrac{x}{3}\times 3y}\le x+2y+\dfrac{\dfrac{x}{3}+3y}{2}=\dfrac{7}{6}x+\dfrac{7y}{2}=\dfrac{7}{6}(x+3y)\\
-&\therefore x+3y\ge 2\times\dfrac{6}{7}=\dfrac{12}{7}
-\end{flalign*}
+\end{cases}
+$
+
+其实这二个解均可使用，但对于基本不等式，如果配的系数为负数，不满足使用条件，麻烦，取$\dfrac{1}{3}$即可。
+
+$\therefore 2= x+2y+\sqrt{(\dfrac{1}{3}x)\times\dfrac{y}{\frac{1}{3}}}=x+2y+\sqrt{\dfrac{x}{3}\times 3y}\le x+2y+\dfrac{\dfrac{x}{3}+3y}{2}=\dfrac{7}{6}x+\dfrac{7y}{2}=\dfrac{7}{6}(x+3y)$
+
+$\therefore x+3y\ge 2\times\dfrac{6}{7}=\dfrac{12}{7}$
+%\end{flalign*}
 
 \end{document}
