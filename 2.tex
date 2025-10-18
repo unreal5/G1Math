@@ -1,0 +1,74 @@
+\subsection{待定系数法}
+\begin{exer}
+\\
+已知$a,b>0,则\dfrac{ab+b}{a^2+b^2+1}$的最大值？
+
+\itshape\small\noindent
+对于$a^2+b^2+c^2$形式，可以利用待定系数法配凑，例如：
+\[a^2+b^2+c^2=a^2+\lambda b^2 +(1-\lambda)b^2+c^2\ge2\sqrt{\lambda}ab+2\sqrt{1-\lambda}bc\]
+这样就会让a,b,c三者联系起来。把例中的1当作$c^2=1$，则：
+\begin{flalign*}
+&原式分母\ge 2\sqrt{\lambda}ab+2\sqrt{1-\lambda}b\cdot1&\\
+&分子=ab+b，ab项系数为1，b项系数也为1。我们需要对应项成比例：\\
+&\dfrac{1}{2\sqrt{\lambda}}=\dfrac{1}{2\sqrt{1-\lambda}}\\
+&解得\lambda=\dfrac{1}{2}\\
+&\therefore 原式\le\dfrac{ab+b}{\sqrt{2}(ab+b)}=\dfrac{\sqrt{2}}{2}\\
+&\therefore 最大值为\dfrac{\sqrt{2}}{2}
+\end{flalign*}
+\end{exer}
+
+\begin{exer}
+已知$a>0，b>0，求\dfrac{ab+b}{a^2+b^2+1}$的最大值。
+\end{exer}
+利用上例的配凑思想可解。
+\begin{exer}
+$已知x，y>0，且x+2y+\sqrt{xy}=2，求x+3y的最大值。$
+\end{exer}
+\kaishu
+利用基本不等式可知：$\sqrt{xy}\le\dfrac{x+y}{2}$，原式变为：$2\le x+2y+\dfrac{x+y}{2}$。
+
+此时对比题目要求的结果是x+3y。思考：如何才能让 $x+2y+\dfrac{x+y}{2}$（通过某种变换）$\rightarrow\quad x+3y?$显然$\dfrac{x+y}{2}$中，分子x，y前面有某种系数就可以。
+
+但是的$x+y$是由$\sqrt{xy}$得来的，这是题目给出的条件，我们无法修改，我们应该如何做？
+
+没办法改变条件，但可以对条件进行变形，利用$a\times\dfrac{1}{a}$的特性，把$\sqrt{xy}\rightarrow\sqrt{(a\cdot x) \times\dfrac{y}{a}}$； 由基本不等式得：$\sqrt{(ax) \times\dfrac{y}{a}}\le\dfrac{ax+\dfrac{y}{a}}{2}$
+
+现在的问题就变成如何求出a的值。
+
+原式变形为：$2=x+2y+\sqrt{(ax) \times\dfrac{y}{a}}\le x+2y +\dfrac{ax+\dfrac{y}{a}}{2}=(\dfrac{a}{2}+1)x+(2+\dfrac{1}{2a})y$
+对比要求的结果：$x+3y$，$x,y的系数比1:3$
+
+$\therefore \dfrac{\dfrac{a}{2}+1}{2+\dfrac{1}{2a}}=\dfrac{1}{3}\iff 3a^2+2a-1=0$
+
+解得：$a=\begin{cases}
+\dfrac{1}{3}\\
+-\dfrac{4}{3}
+\end{cases}
+$
+
+其实这二个解均可使用，但对于基本不等式，如果配的系数为负数，不满足使用条件，麻烦，取$\dfrac{1}{3}$即可。
+
+$\therefore 2= x+2y+\sqrt{(\dfrac{1}{3}x)\times\dfrac{y}{\frac{1}{3}}}=x+2y+\sqrt{\dfrac{x}{3}\times 3y}\le x+2y+\dfrac{\dfrac{x}{3}+3y}{2}=\dfrac{7}{6}x+\dfrac{7y}{2}=\dfrac{7}{6}(x+3y)$
+
+$\therefore x+3y\ge 2\times\dfrac{6}{7}=\dfrac{12}{7}$
+%\end{flalign*}
+\rmfamily
+\begin{exer}
+$设x,y\in \mathbf{R}，若4x^2+y^2+xy=1，则2x+y的最大值为？$
+\end{exer}
+解：\begin{enumerate}
+\item \textbf{方法一（常规万能K值法）：}
+\begin{flalign*}
+&\textbf{求谁设谁}：设2x+y=K，则y=k-2x，因为条件简单，代入化简得：&\\
+&6x^2-3kx+k^2-1=0\\
+&\because 条件成立，必定存在x，即原方程有解\\
+&\therefore \Delta \ge 0，即 (-3k)^2-4\times 6\times (k^2-1)\ge 0\\
+&化简得：9k^2-
+\end{flalign*}
+\item \textbf{方法二：}利用前述配凑思想，解出配的系数为$\dfrac{\sqrt{6}}{3}$
+\end{enumerate}
+\begin{exercise}
+$已知a,b>0,a+2b=2,则\dfrac{a^2+1}{a}+\dfrac{2b^2}{b+1}$的最小值？
+\end{exercise}
+第二项不好折，但看到$b^2和(b+1)，在拆分的情景下，应考虑(b+1)(b-1)=b^2-1$。原式=$a+\dfrac{1}{a}+\dfrac{2(b^2-1)+2}{b+1}=a+\dfrac{1}{a}+2(b-1)+\dfrac{2}{b+1}=a+2b-2+\dfrac{1}{a}+\dfrac{2}{b+1}$，由条件知前三项为0，则变成$\dfrac{1}{a}+\dfrac{2}{b+1}$，应用1的代换或权方和速解$=\dfrac{9}{4}$，……略。
+\newpage
