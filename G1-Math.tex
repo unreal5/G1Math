@@ -1,158 +1,102 @@
 \documentclass[CJKmath,a4paper,10pt]{ctexart}
 \usepackage{geometry}
 \geometry{inner=1.5cm,outer=1.5cm,top=2.45cm,bottom=1cm}
-\RequirePackage[dvipsnames,svgnames,x11names,table]{xcolor}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
 
-\usepackage{xeboiboites}
-% /* --------------------------------- 模板默认颜色 --------------------------------- */
-\colorlet{outermarginfgcolor}{DarkCyan} % foregroundcolor 较深的前景色
-\colorlet{outermarginbgcolor}{DarkCyan!30} % backgroundcolor 较浅的背景色
-% /* -------------------------------------------------------------------------- */
-
-\RequirePackage{tikz,calc} %%页面样式设计核心包 %提供\pgfonlayer命令
-\usetikzlibrary{cd,calc,shadows,hobby,intersections, decorations.markings, decorations.pathreplacing,spy,arrows,shapes,fadings,trees,mindmap,patterns,shapes.arrows,shapes.symbols,tikzmark,shapes.geometric,graphs, quotes, angles,decorations.pathmorphing,through,shadings,backgrounds,positioning,fit,arrows.meta,shapes.misc,decorations.shapes}
-
-% 绘图：函数图像
-\usepackage{pgfplots}
-\pgfplotsset{compat=1.18}
-
-\RequirePackage[most]{tcolorbox}
+\usepackage{tikz,calc}
+\usetikzlibrary{calc,shadows.blur}
+\usepackage[most]{tcolorbox}
 \tcbuselibrary{breakable, skins,theorems}
 
 
-\usepackage{amsmath,amssymb}
-\usepackage{xparse}
-\usepackage{etoolbox}
-\RequirePackage[explicit]{titlesec}
-\usepackage{varwidth}
-% /* -------------------------------- Section样式 ------------------------------- */
-%\titleformat{\section}
-%{\thispagestyle{empty}}
-%{}
-%{-.5em} %左右移动\thesection标签位置
-%{\mysectionformat{#1}}
-%
-%\titleformat{name=\section,numberless}{}{}{-.5em}{\mysectionnonumformat{#1}}
-%
-%\newcommand{\mysectionformat}[1]{%
-%\makebox[0pt][l]{\def\rad{7pt}%
-%\begin{tikzpicture}[remember picture]
-%%  \path[fill=outermarginfgcolor,drop shadow={opacity=0.3,shadow xshift=.05cm,shadow yshift=-.05cm}]node[append after command={
-%%  (sec.north west) -- (sec.south west) -- ([xshift=-\rad]sec.south east) to[out=0,in=180,looseness=1] ([xshift=3*\rad]sec.north east) --cycle},
-%%  text=white,font=\sffamily\large\bfseries,align=center,inner ysep=2mm] (sec) at (0,0) {\thesection};
-%	\path[fill=outermarginfgcolor,drop shadow={opacity=0.2,shadow xshift=.05cm,shadow yshift=-.05cm}]node[append after command={
-%  (sec.north west) -- (sec.south west) -- ([xshift=-\rad]sec.south east) to[out=0,in=180,looseness=0] ([xshift=1*\rad]sec.north east) --cycle},
-%  text=white,font=\sffamily\large\bfseries,align=center,inner ysep=2mm] (sec) at (0,0) {\thesection};
-%  % 标题
-%  \path[fill=outermarginfgcolor,drop shadow={opacity=0.2,shadow xshift=.05cm,shadow yshift=-.05cm}]node[append after command={
-%      ([xshift=1*\rad]secnum.north west) to[out=180,in=0,looseness=0] ([xshift=-1*\rad]secnum.south west) --(secnum.south east) to (secnum.north east) --cycle},text=black,font=\sffamily\large\bfseries,below right](secnum) at ([shift={(.5*\rad,-0.5mm)}]sec.north east) {\begin{varwidth}{.85\linewidth}\setlength\baselineskip{18pt}\hspace{.5cm}#1\end{varwidth}};
-%\end{tikzpicture}}}%最后一个选项为 [<after code>]
-%
-%\newcommand{\mysectionnonumformat}[1]{%
-%\makebox[0pt][l]{\def\rad{7pt}%
-%\begin{tikzpicture}[remember picture]
-%  \path[fill=outermarginfgcolor,drop shadow={opacity=0.3,shadow xshift=.05cm,shadow yshift=-.05cm}]node[append after command={
-%  % 去掉左侧曲线，改为直线；右侧保持原先弧线造型
-%  (sec.north west) -- (sec.south west) -- ([xshift=-\rad]sec.south east) to[out=0,in=180,looseness=1] ([xshift=3*\rad]sec.north east) --cycle},
-%  text=white,font=\sffamily\large\bfseries,align=center,inner ysep=2mm] (sec) at (0,0) {Sec};
-%  \node[text=black,font=\large,below right] (secnum) at ([shift={(0,-1mm)}]sec.north east) {\begin{varwidth}{.85\linewidth}\setlength\baselineskip{18pt}\hspace{.5cm}#1\end{varwidth}};
-%\end{tikzpicture}}}%最后一个选项为 [<after code>]
-%
-%\titlespacing*{\section}{0pt}{3.5ex plus 1ex minus .2ex}{2.3ex plus .2ex}
-
-
-% ==== ElegantBook fancy-mode exercise (standalone) ====
-\makeatletter
-\newcommand{\exercisename}{}
-\definecolor{main}{RGB}{0,120,2}
-\colorlet{outermarginfgcolor}{DarkCyan} % foregroundcolor 较深的前景色
-\colorlet{outermarginbgcolor}{white} % backgroundcolor 较浅的背景色
-% 设定主编号上级计数器（tcolorbox auto counter 使用）
-\def\ELEGANT@thmcnt{section}
-
-\tcbset{new/usesamecnt/.style={}}
-
+\usepackage{xkeyval}
+\makeatletter 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xkeyval} 
+\usepackage{zhlipsum}
 \tcbset{
-  common/.style={
-    fontupper=\itshape,
-    lower separated=false,
-    coltitle=white,
-    colback=gray!5,
-    boxrule=0.5pt,
-    fonttitle=\bfseries,
-    enhanced,
-    breakable,
-    top=1em,
-    before skip=8pt,
-    attach boxed title to top left={
-      yshift=-0.11in,
-      xshift=0.15in},
-    boxed title style={
-      boxrule=0pt,
-      colframe=white,
-      arc=0pt,
-      outer arc=0pt},
-    separator sign={.},
-  },
-  defstyle/.style={
-    common,
-    colframe=outermarginfgcolor,
-    colback=outermarginbgcolor,
-    arc=0pt,
-    colbacktitle=outermarginfgcolor,
-    overlay unbroken and last={
-      % 更稳健的定位，用 frame.south east 避免 width 变量依赖
-      \node[anchor=south east, outer sep=0pt] at (frame.south east) {\textcolor{outermarginfgcolor}{$\blacksquare$}};},
-  },
-  ELEGANT@title/.code n args={2}{
-    \tcbset{title={\csname #1name\endcsname~%
-      %\ifdef{\thetcbcounter}{\thetcbcounter}{}%不需要计数器
-      \ifblank{#2}{}{ (#2)}}}
-  },
-  ELEGANT@label/.code n args={2}{\ifblank{#2}{}{\tcbset{label={#1:#2}}}},
-}
-
-\NewDocumentCommand\DefineNewEnvironment{ m m m O{} }{%
-  \ifcsundef{#1name}{}{\relax}%
-  \expandafter\ifblank\expandafter{#4}{\tcbset{new/usecnt/.style={}}}{\tcbset{new/usecnt/.style={use counter from = #4}}}%
-  \DeclareTColorBox[auto counter,number within=\ELEGANT@thmcnt,usesamecnt,usecnt]{#1}{ g o t\label g }{%
-    common,#3,
-    IfValueTF={##1}{ELEGANT@title={#1}{##1}}{IfValueTF={##2}{ELEGANT@title={#1}{##2}}{ELEGANT@title={#1}{}}},%
-    IfValueT={##4}{%
-      IfBooleanTF={##3}{label={##4}}{ELEGANT@label={#2}{##4}}%
-    }%
+    common/.style={
+      fontupper=\rmfamily,
+      lower separated=true,
+      coltitle=black,
+      colback=gray!5,
+      boxrule=0.5pt,
+      fonttitle=\bfseries,
+      enhanced,
+      breakable,
+      top=8pt,
+      before skip=8pt,
+      attach boxed title to top left={yshift=-0.11in,xshift=0.15in},
+      boxed title style={
+      	boxrule=0pt,
+        colframe=white,
+        arc=0pt,
+        outer arc=0pt
+     	},
+      separator sign={.},
+      drop fuzzy shadow
+     },
+     litistyle/.style={  %例题风格
+     	common,
+      colframe=gray,%  
+      colback=gray!5,
+      colbacktitle=yellow, 
+      overlay unbroken and last={
+      \node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
+		 },
+		 BreakableBox@title/.code n args={2}
+		      {
+		        \ifblank{#2}
+		          {\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+		          {\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+		      },
+}      
+  % define an internal control sequence \newbreakablebox for fancy mode's newtheorem
+  % #1 is the environment name, #2 is the prefix of label, #3 is the style
+  % style: thmstyle, defstyle, prostyle
+  % e.g. \newbreakablebox{theorem}{thm}{thmstyle}
+  % will define two environments: numbered ``theorem'' and no-numbered ``theorem*''
+  % WARNING FOR MULTILINGUAL: this cs will automatically find \theoremname's definition,
+  % WARNING FOR MULTILINGUAL: it should be defined in language settings.
+  \newcommand{\newbreakablebox}[3]{
+    \ifcsundef{#1name}{%
+      % define a default name if not defined before
+      \tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+    }{\relax}
+    \DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+        common,#3,
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+        IfValueT={##4}
+          {
+            IfBooleanTF={##3}
+              {label={##4}}
+              {VIVID@label={#2}{##4}}
+          }
+      }
+    \DeclareTColorBox{#1*}{ g o }{
+        common,#3,
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+      }
   }
-  \DeclareTColorBox{#1*}{ g o }{%
-    common,#3,
-    IfValueTF={##1}{ELEGANT@title={#1}{##1}}{IfValueTF={##2}{ELEGANT@title={#1}{##2}}{ELEGANT@title={#1}{}}},%
-  }
-}
-
-\DefineNewEnvironment{exercise}{def}{defstyle}
-
-
-
-% ---- example 环境定义（仿照 exercise） ----
-% 名称显示文字
-\newcommand{\examplename}{例}
-% 配色与样式：参考 defstyle，略作颜色区分，正文不用斜体
-	\tcbset{
-  examplestyle/.style={
-    common,
-    fontupper=\normalfont, % 与 exercise 区分：正文常规体
-    colframe=RoyalBlue4,
-    colback=RoyalBlue1!5,
-    colbacktitle=RoyalBlue4,
-    arc=0pt,
-    overlay unbroken and last={
-      \node[anchor=south east, outer sep=0pt] at (frame.south east) {\textcolor{RoyalBlue4}{$\blacksquare$}};},
-  },
-}
-% 新 example 环境：内部计数共享同一 section 层级（与 exercise 相同）
-\DefineNewEnvironment{example}{ex}{examplestyle}
-% 使用方式：\begin{example}[可选标题]\label{ex:xxx} ... \end{example}
+  % define several environment 
+  % we define headers like \definitionname before
+  \newcommand{\litiname}{例题}
+  \newbreakablebox{liti}{def}{litistyle}
 \makeatother
-% ==== End exercise block ====
+
+
 
 %%%marker环境
 \newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
@@ -167,139 +111,111 @@
 	},
 	drop fuzzy shadow,#1
 }
-\usepackage{float}
-\usepackage{fontawesome5}
-\usepackage{pifont}
 
-\newbreakabletheorem[small box style={draw=orange!30!black!20,rounded corners,%
- fill=orange!10!black!2,decoration=penciline, decorate, thick},
- headfont=\bfseries\large,
- big box style={color=orange!30!black!20,fill=yellow!5,thick},
- broken edges={draw=orange!30!black!20,thick,fill=orange!20!black!5,
- decoration={random steps, segment length=.5cm,%
- amplitude=1.3mm},decorate},%
- other edges={decoration=penciline,decorate,thick}]%
- {exer}{例题}{exer}
- 
- 
-\newboxedtheorem[small box style={fill=blue!20, draw=black, line width=.7pt,
-decoration={penciline},decorate},
-big box style={draw=black,thin,
-decoration={penciline},decorate},
-headfont=\bfseries]%
-{solution}{解：}{}
- 
- 
-
+\usepackage{exam-zh-choices}
 \begin{document}
-\section{习题}
-\begin{exer}
-$\exists x >0，使得\dfrac{4x^2+1}{2x}-3m+m^2<0成立，求实数m的取值范围$
-\end{exer}
-\begin{solution}
-\begin{flalign*}
-&原不等式可化为：m^2-3m < -(\dfrac{4x^2+1}{2x}) = -(2x+\dfrac{1}{2x})&\\
-&问题转化为：m^2-3m < -(2x+\dfrac{1}{2x})_{max}。&\\
-&\because x>0，\therefore 2x+\dfrac{1}{2x}\ge 2\sqrt{2x\cdot\dfrac{1}{2x}}=2。当且仅当x=\dfrac{1}{2}时取等。&\\
-&\therefore -(2x+\dfrac{1}{2x})的最大值为-2。&\\
-&\therefore m^2-3m < -2 \iff m^2-3m+2<0 \iff (m-1)(m-2)<0&\\
-&解得：1<m<2&
-\end{flalign*}
-\end{solution}
+\section{数学作业}
 
-\begin{exer}
-$若正实数a，b满足a+b=1，则ax^2+\big(3+\dfrac{1}{b}\big)x-a=0的根的最大值为？$
-\end{exer}
-\begin{solution}\small
-\begin{flalign*}
-&解：设方程为 ax^2+\left(3+\dfrac{1}{b}\right)x-a=0。由韦达定理可知，两根之积 x_1x_2 = \dfrac{-a}{a}=-1。&\\
-&这表明方程必有一正根和一负根。我们要求的是根的最大值，即正根的最大值。&\\
-&设正根为 x（x>0），则另一根为 -\dfrac{1}{x}。&\\
-&两根之和为 x_1+x_2 = x - \dfrac{1}{x} = -\dfrac{3+\frac{1}{b}}{a} = -\dfrac{3b+1}{ab}。&\\
-&x - \dfrac{1}{x} = -\dfrac{3b+1}{ab} = -\dfrac{3b+a+b}{ab} = -\left(\dfrac{4b+a}{ab}\right) = -\left(\dfrac{4}{a}+\dfrac{1}{b}\right)&\\
-&我们要求 x 的最大值。因为 x>0，f(x)=x-\dfrac{1}{x} 是一个增函数。因此，要使 x 最大，就需要使 x-\dfrac{1}{x} 最大。&\\
-&这等价于求 -\left(\dfrac{4}{a}+\dfrac{1}{b}\right) 的最大值，也就是求 \left(\dfrac{4}{a}+\dfrac{1}{b}\right) 的最小值。&\\
-&\textbf{权方和}：\dfrac{4}{a}+\dfrac{1}{b}  \ge \dfrac{(2+1)^2}{a+b} = 9。当且仅当 \dfrac{2}{a}=\dfrac{1}{b}，即 a=2b 时取等。&\\
-&又\because a+b=1 \therefore 2b+b=1 \implies b=\dfrac{1}{3}, a=\dfrac{2}{3}。&\\
-&所以 x-\dfrac{1}{x} 的最大值为 -9。即 x^2+9x-1=0。&\\
-&解得 x=\dfrac{-9\pm\sqrt{81+4}}{2}。因为 x>0，所以 x=\dfrac{-9+\sqrt{85}}{2}。&
-\end{flalign*}
-\end{solution}
 
-\begin{exer}
-$已知集合A=\{x|0\le x \le a\}，集合B=\{x|m^2+5\le x \le m^2+6\}。若命题“\exists m\in\mathbb{R}，A\cap B=\emptyset”为假命题，则实数a的取值范围？$
-\end{exer}
-\begin{solution}\small
-\begin{flalign*}
-&解：设命题 p 为：“\exists m\in\mathbb{R}，A\cap B=\emptyset”。题目指出命题 p 为假命题，则其否定形式 \neg p 必为真命题。&\\
-&\neg p：“\forall m\in\mathbb{R}，A\cap B \neq \emptyset”。这意味着对于任意实数 m，集合 A 和集合 B 的交集都非空。&\\
-&集合 A = [0, a]，集合 B = [m^2+5, m^2+6]。&\\
-&\because m^2 \ge 0, \therefore m^2+5 \ge 5。集合 B 是一个始终在区间 [5, +\infty) 内的、长度为1的闭区间。&\\
-&要使 A 与所有可能的 B 都有交集，A必须覆盖 B 可能出现的所有范围，即 [5, +\infty)。&\\
-&因此 A=[0,a] 必须是 [0, +\infty)，这意味着 a\to+\infty，这在实数 a 的取值范围中是不可能的。&\\
-&我们\textbf{怀疑}原命题可能存在印刷错误，正确的应该是：“\forall m\in\mathbb{R}，A\cap B=\emptyset”为假命题。&\\
-&那么其真命题形式是：“\exists m\in\mathbb{R}，A\cap B \neq \emptyset”。&\\
-&这意味着，存在至少一个实数 m，使得集合 A 和 B 的交集不为空。&\\
-&要使 A=[0, a] 和 B=[m^2+5, m^2+6] 有交集，需要满足 a \ge m^2+5。&\\
-&我们需要存在至少一个 m 使得 a \ge m^2+5 成立。&\\
-&函数 f(m) = m^2+5 的最小值为 5（当 m=0 时）。&\\
-&为了让不等式 a \ge m^2+5 有解，a 必须大于或等于 m^2+5 的最小值。&\\
-&所以，a \ge 5。&\\
-&因此，实数a的取值范围是 [5, +\infty)。&
-\end{flalign*}
-\end{solution}
 
-\begin{exer}[19题]
-若集合$\{x|px^2+8x-4=0\}=\{q\}，则p+q的取值可以为？$
-\end{exer}
-\begin{solution}\small
-\begin{flalign*}
-&若集合 \{x | px^2+8x-4=0\} = \{q\}，这意味着方程 px^2+8x-4=0 只有一个解，这个解就是 q。&\\
-&一个方程只有一个解，需要分两种情况讨论：&\\
-&\textbf{情况一：该方程为一元一次方程} &\\
-&当 p=0 时，方程变为一个一元一次方程：8x - 4 = 0。解得 x = \dfrac{1}{2}。&\\
-&此时，集合为 \{\dfrac{1}{2}\}，所以 q=\dfrac{1}{2}。p+q = 0 + \dfrac{1}{2} = \dfrac{1}{2}。&\\
-&\textbf{情况二：该方程为一元二次方程且判别式为0} &\\
-&当 p \neq 0 时，该方程为一元二次方程。要使其只有一个解，判别式 \Delta 必须为0。&\\
-&\Delta = b^2 - 4ac = 8^2 - 4(p)(-4) = 64 + 16p。&\\
-&令 \Delta = 0，则：64 + 16p = 0，解得 p = -4。&\\
-&此时，方程为 -4x^2+8x-4=0。唯一的解 q = \dfrac{-b}{2a} = \dfrac{-8}{2(-4)} = 1。&\\
-&此时，p+q = -4 + 1 = -3。&\\
-&综上所述，p+q 的取值可以为 \dfrac{1}{2} 或 -3。&
-\end{flalign*}
-\end{solution}
 
-\begin{exer}[20题]
-$已知实数m,n,p且m>1,mn-n-2m^2=0,m^2+n+4=4m+p,则下列结论正确的是：\\A.\quad n>m\quad B.\quad p>m \quad C.\quad p<n\quad D.\quad n<p$
-\end{exer}
-\begin{solution}\small
-\begin{flalign*}
-&1. \textbf{分析第一个方程}: mn - n - 2m^2 = 0&\\
-&n(m-1) = 2m^2&\\
-&\text{因为 } m>1, \text{所以 } m-1>0, \text{我们可以得到：}&\\
-&n = \dfrac{2m^2}{m-1}&\\
-\\
-&2. \textbf{比较 n 和 m (选项A)}&\\
-&n-m = \dfrac{2m^2}{m-1} - m = \dfrac{2m^2 - m(m-1)}{m-1} = \dfrac{m^2+m}{m-1}&\\
-&\text{因为 } m>1, \text{所以分子 } m^2+m > 0, \text{分母 } m-1 > 0。&\\
-&\therefore n-m > 0 \implies n > m. \text{ 所以选项A正确。}&\\
-\\
-&3. \textbf{分析第二个方程}: m^2+n+4=4m+p&\\
-&p = m^2-4m+4+n = (m-2)^2+n&\\
-\\
-&4. \textbf{比较 p 和 n (选项C, D)}&\\
-&p-n = (m-2)^2 \ge 0&\\
-&\text{这意味着 } p \ge n. \text{ 仅当 m=2 时 p=n。}&\\
-&\text{所以选项C (p<n) 错误，选项D (n<p) 不总是成立。}&\\
-\\
-&5. \textbf{比较 p 和 m (选项B)}&\\
-&\text{我们已经证明了 } p \ge n \text{ 且 } n > m。&\\
-&\text{根据不等式的传递性，} p \ge n > m \implies p > m.&\\
-&\text{所以选项B也正确。}&\\
-\\
-&\textbf{结论}: \text{如果这是单选题，题目可能存在问题，因为A和B都正确。如果这是多选题，则选A和B。}&
-\end{flalign*}
-\end{solution}
+\begin{liti}
+若正实数$a,b$满足$a+b=1$,则$ax^2+\big(3+\dfrac{1}{b}\big)x-a=0$的根的最大值为？
+\tcblower\kaishu
+设方程两根分别为$\alpha,\beta$，其中$\alpha\le\beta$。
+由韦达定理，$\alpha\times\beta=\dfrac{-a}{a}=-1$。
+因为$a$是正实数，所以方程必有一正根和一负根。因此，较大根 $\beta > 0$。
+
+将$\beta$代入原方程，我们得到：$a\beta^2 + \left(3+\dfrac{1}{b}\right)\beta - a = 0$
+
+整理后可得：$a(1-\beta^2) = \left(3+\dfrac{1}{b}\right)\beta$
+
+因为 $a>0, b>0, \beta>0$，所以 $\left(3+\dfrac{1}{b}\right)\beta > 0$。
+因此，$a(1-\beta^2) > 0$，可推得 $1-\beta^2 > 0$，即 $0 < \beta < 1$。
+
+又因为 $a,b$为正实数且 $a+b=1$，所以 $0<a<1$ 且 $0<b<1$。
+
+将 $a=1-b$ 代入整理后的方程：
+$(1-b)(1-\beta^2) = \left(3+\dfrac{1}{b}\right)\beta = \dfrac{3b+1}{b}\beta$
+
+化简后得：$b-b^2-b\beta^2+b^2\beta^2 = 3b\beta+\beta$
+
+将上式整理为关于$b$的二次方程：
+$(\beta^2-1)b^2 + (1-3\beta-\beta^2)b - \beta = 0$
+
+再两边同时$\times -1$得：$(1-\beta^2)b^2 + (\beta^2+3\beta-1)b + \beta = 0$
+
+因为$b$是实数，所以该二次方程的判别式 $\Delta \ge 0$。
+
+$\Delta = (\beta^2+3\beta-1)^2 - 4(1-\beta^2)\beta \ge 0$
+
+$\beta^4+9\beta^2+1+6\beta^3-2\beta^2-6\beta - 4\beta+4\beta^3 \ge 0$
+
+$\beta^4+10\beta^3+7\beta^2-10\beta+1 \ge 0$
+
+由于 $\beta \ne 0$，不等式两边同除以 $\beta^2$：$\beta^2+10\beta+7-\dfrac{10}{\beta}+\dfrac{1}{\beta^2} \ge 0$
+
+$\left(\beta^2+\dfrac{1}{\beta^2}\right) + 10\left(\beta-\dfrac{1}{\beta}\right) + 7 \ge 0$
+
+令 $y=\beta-\dfrac{1}{\beta}$，则 $\beta^2+\dfrac{1}{\beta^2} = y^2+2$。
+
+代入不等式：$y^2+2 + 10y + 7 \ge 0$
+
+$y^2+10y+9 \ge 0$
+
+$(y+1)(y+9) \ge 0$
+
+解得 $y \ge -1$ 或 $y \le -9$。
+
+即 $\beta-\dfrac{1}{\beta} \ge -1$ 或 $\beta-\dfrac{1}{\beta} \le -9$。
+因为 $0 < \beta < 1$，所以 $\beta-\dfrac{1}{\beta} < 0$。
+
+\begin{itemize}
+    \item 对于 $\beta-\dfrac{1}{\beta} \ge -1$：\\
+    因为 $\beta>0$，不等式两边同乘 $\beta$ 得 $\beta^2-1 \ge -\beta$，即 $\beta^2+\beta-1 \ge 0$。\\
+    解得 $\beta \ge \dfrac{-1+\sqrt{5}}{2}$ 或 $\beta \le \dfrac{-1-\sqrt{5}}{2}$。\\
+    此解与 $0 < \beta < 1$ 的区间没有交集，故此情况不成立。
+    \item 对于 $\beta-\dfrac{1}{\beta} \le -9$：\\
+    因为 $\beta>0$，不等式两边同乘 $\beta$ 得 $\beta^2-1 \le -9\beta$，即 $\beta^2+9\beta-1 \le 0$。\\
+    解得 $\dfrac{-9-\sqrt{85}}{2} \le \beta \le \dfrac{-9+\sqrt{85}}{2}$。
+\end{itemize}
+
+综合 $0 < \beta < 1$ 和上述解集，我们得到 $\beta$ 的取值范围是 $0 < \beta \le \dfrac{-9+\sqrt{85}}{2}$。
+
+因此，根 $\beta$ 的最大值为 $\dfrac{-9+\sqrt{85}}{2}$。
+\newpage
+\textbf{\rmfamily 解法二：}
+
+设方程 $ax^2+\left(3+\dfrac{1}{b}\right)x-a=0$的两根为$x_1,x_2$。
+
+由韦达定理得： $x_1x_2 = \dfrac{-a}{a}=-1$。这表明方程必有一正根和一负根。我们要求的是根的最大值，即正根的最大值。
+
+设正根为 $x（x>0）$，则另一根为 $-\dfrac{1}{x}$。 
+
+$两根之和为 x_1+x_2 = x - \dfrac{1}{x} = -\dfrac{3+\dfrac{1}{b}}{a} = -\dfrac{3b+1}{ab}$。
+\vskip1.2ex
+
+利用“1的代换”得：$x - \dfrac{1}{x} = -\dfrac{3b+1}{ab} = -\dfrac{3b+a+b}{ab} = -\left(\dfrac{4b+a}{ab}\right) = -\left(\dfrac{4}{a}+\dfrac{1}{b}\right)$
+
+我们要求 $x$ 的最大值：
+
+$\because x>0，f(x)=x-\dfrac{1}{x}$ 是一个增函数。
+
+$\therefore$要使 $x$ 最大，就需要使 $x-\dfrac{1}{x} 最大$。
+
+这等价于求 $-\left(\dfrac{4}{a}+\dfrac{1}{b}\right)$ 的最大值，也就是求 $\left(\dfrac{4}{a}+\dfrac{1}{b}\right)$ 的最小值。
+
+\textbf{\rmfamily 权方和}：$\dfrac{4}{a}+\dfrac{1}{b}  \ge \dfrac{(2+1)^2}{a+b} = 9$。当且仅当 $\dfrac{2}{a}=\dfrac{1}{b}$，即 $a=2b$ 时取等。
+
+又$\because a+b=1 \therefore 2b+b=1 \implies b=\dfrac{1}{3}, a=\dfrac{2}{3}。$
+
+$\therefore \big(x-\dfrac{1}{x}\big)_{max} = -9$。即 $x^2+9x-1=0。$
+
+解得 $x=\dfrac{-9\pm\sqrt{81+4}}{2}$。
+
+又$\because x>0$，$\therefore x=\dfrac{-9+\sqrt{85}}{2}$。
+
+\end{liti}
 
 
 \end{document}

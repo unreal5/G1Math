@@ -1,0 +1,122 @@
+\begin{liti}
+$\exists x >0，使得\dfrac{4x^2+1}{2x}-3m+m^2<0成立，求实数m的取值范围$
+\tcblower
+区別があるかどうかを正しく考えます。
+\begin{enumerate}
+    \item なんだかんだで127通り
+    \item なんだかんだで540通り
+\end{enumerate}
+\end{liti}
+\newpage
+\section{习题}
+\begin{exer}
+$\exists x >0，使得\dfrac{4x^2+1}{2x}-3m+m^2<0成立，求实数m的取值范围$
+\end{exer}
+\begin{solution}
+\begin{flalign*}
+&原不等式可化为：m^2-3m < -(\dfrac{4x^2+1}{2x}) = -(2x+\dfrac{1}{2x})&\\
+&问题转化为：m^2-3m < -(2x+\dfrac{1}{2x})_{max}。&\\
+&\because x>0，\therefore 2x+\dfrac{1}{2x}\ge 2\sqrt{2x\cdot\dfrac{1}{2x}}=2。当且仅当x=\dfrac{1}{2}时取等。&\\
+&\therefore -(2x+\dfrac{1}{2x})的最大值为-2。&\\
+&\therefore m^2-3m < -2 \iff m^2-3m+2<0 \iff (m-1)(m-2)<0&\\
+&解得：1<m<2&
+\end{flalign*}
+\end{solution}
+
+\begin{exer}
+$若正实数a，b满足a+b=1，则ax^2+\big(3+\dfrac{1}{b}\big)x-a=0的根的最大值为？$
+\end{exer}
+\begin{solution}\small
+\begin{flalign*}
+&解：设方程为 ax^2+\left(3+\dfrac{1}{b}\right)x-a=0。由韦达定理可知，两根之积 x_1x_2 = \dfrac{-a}{a}=-1。&\\
+&这表明方程必有一正根和一负根。我们要求的是根的最大值，即正根的最大值。&\\
+&设正根为 x（x>0），则另一根为 -\dfrac{1}{x}。&\\
+&两根之和为 x_1+x_2 = x - \dfrac{1}{x} = -\dfrac{3+\frac{1}{b}}{a} = -\dfrac{3b+1}{ab}。&\\
+&x - \dfrac{1}{x} = -\dfrac{3b+1}{ab} = -\dfrac{3b+a+b}{ab} = -\left(\dfrac{4b+a}{ab}\right) = -\left(\dfrac{4}{a}+\dfrac{1}{b}\right)&\\
+&我们要求 x 的最大值。因为 x>0，f(x)=x-\dfrac{1}{x} 是一个增函数。因此，要使 x 最大，就需要使 x-\dfrac{1}{x} 最大。&\\
+&这等价于求 -\left(\dfrac{4}{a}+\dfrac{1}{b}\right) 的最大值，也就是求 \left(\dfrac{4}{a}+\dfrac{1}{b}\right) 的最小值。&\\
+&\textbf{权方和}：\dfrac{4}{a}+\dfrac{1}{b}  \ge \dfrac{(2+1)^2}{a+b} = 9。当且仅当 \dfrac{2}{a}=\dfrac{1}{b}，即 a=2b 时取等。&\\
+&又\because a+b=1 \therefore 2b+b=1 \implies b=\dfrac{1}{3}, a=\dfrac{2}{3}。&\\
+&所以 x-\dfrac{1}{x} 的最大值为 -9。即 x^2+9x-1=0。&\\
+&解得 x=\dfrac{-9\pm\sqrt{81+4}}{2}。因为 x>0，所以 x=\dfrac{-9+\sqrt{85}}{2}。&
+\end{flalign*}
+\end{solution}
+
+\begin{exer}
+$已知集合A=\{x|0\le x \le a\}，集合B=\{x|m^2+5\le x \le m^2+6\}。若命题“\exists m\in\mathbb{R}，A\cap B=\emptyset”为假命题，则实数a的取值范围？$
+\end{exer}
+\begin{solution}\small
+\begin{flalign*}
+&解：设命题 p 为：“\exists m\in\mathbb{R}，A\cap B=\emptyset”。题目指出命题 p 为假命题，则其否定形式 \neg p 必为真命题。&\\
+&\neg p：“\forall m\in\mathbb{R}，A\cap B \neq \emptyset”。这意味着对于任意实数 m，集合 A 和集合 B 的交集都非空。&\\
+&集合 A = [0, a]，集合 B = [m^2+5, m^2+6]。&\\
+&\because m^2 \ge 0, \therefore m^2+5 \ge 5。集合 B 是一个始终在区间 [5, +\infty) 内的、长度为1的闭区间。&\\
+&要使 A 与所有可能的 B 都有交集，A必须覆盖 B 可能出现的所有范围，即 [5, +\infty)。&\\
+&因此 A=[0,a] 必须是 [0, +\infty)，这意味着 a\to+\infty，这在实数 a 的取值范围中是不可能的。&\\
+&我们\textbf{怀疑}原命题可能存在印刷错误，正确的应该是：“\forall m\in\mathbb{R}，A\cap B=\emptyset”为假命题。&\\
+&那么其真命题形式是：“\exists m\in\mathbb{R}，A\cap B \neq \emptyset”。&\\
+&这意味着，存在至少一个实数 m，使得集合 A 和 B 的交集不为空。&\\
+&要使 A=[0, a] 和 B=[m^2+5, m^2+6] 有交集，需要满足 a \ge m^2+5。&\\
+&我们需要存在至少一个 m 使得 a \ge m^2+5 成立。&\\
+&函数 f(m) = m^2+5 的最小值为 5（当 m=0 时）。&\\
+&为了让不等式 a \ge m^2+5 有解，a 必须大于或等于 m^2+5 的最小值。&\\
+&所以，a \ge 5。&\\
+&因此，实数a的取值范围是 [5, +\infty)。&
+\end{flalign*}
+\end{solution}
+
+\begin{exer}[19题]
+若集合$\{x|px^2+8x-4=0\}=\{q\}，则p+q的取值可以为？$
+\end{exer}
+\begin{solution}\small
+\begin{flalign*}
+&若集合 \{x | px^2+8x-4=0\} = \{q\}，这意味着方程 px^2+8x-4=0 只有一个解，这个解就是 q。&\\
+&一个方程只有一个解，需要分两种情况讨论：&\\
+&\textbf{情况一：该方程为一元一次方程} &\\
+&当 p=0 时，方程变为一个一元一次方程：8x - 4 = 0。解得 x = \dfrac{1}{2}。&\\
+&此时，集合为 \{\dfrac{1}{2}\}，所以 q=\dfrac{1}{2}。p+q = 0 + \dfrac{1}{2} = \dfrac{1}{2}。&\\
+&\textbf{情况二：该方程为一元二次方程且判别式为0} &\\
+&当 p \neq 0 时，该方程为一元二次方程。要使其只有一个解，判别式 \Delta 必须为0。&\\
+&\Delta = b^2 - 4ac = 8^2 - 4(p)(-4) = 64 + 16p。&\\
+&令 \Delta = 0，则：64 + 16p = 0，解得 p = -4。&\\
+&此时，方程为 -4x^2+8x-4=0。唯一的解 q = \dfrac{-b}{2a} = \dfrac{-8}{2(-4)} = 1。&\\
+&此时，p+q = -4 + 1 = -3。&\\
+&综上所述，p+q 的取值可以为 \dfrac{1}{2} 或 -3。&
+\end{flalign*}
+\end{solution}
+
+%\begin{exer}[20题]
+%$已知实数m,n,p且m>1,mn-n-2m^2=0,m^2+n+4=4m+p,则下列结论正确的是：\\A.\quad n>m\quad B.\quad p>m \quad C.\quad p<n\quad D.\quad n<p$
+%\end{exer}
+
+\begin{liti}{20题}\small\kaishu
+已知实数$m,n,p且m>1,mn-n-2m^2=0,m^2+n+4=4m+p,则下列结论正确的是：\\A.\quad n>m\quad B.\quad p>m \quad C.\quad p<n\quad D.\quad n<p$
+\tcblower
+\begin{flalign*}
+&1. \textbf{分析第一个方程}: mn - n - 2m^2 = 0&\\
+&n(m-1) = 2m^2&\\
+&\text{因为 } m>1, \text{所以 } m-1>0, \text{我们可以得到：}&\\
+&n = \dfrac{2m^2}{m-1}&\\
+\\
+&2. \textbf{比较 n 和 m (选项A)}&\\
+&n-m = \dfrac{2m^2}{m-1} - m = \dfrac{2m^2 - m(m-1)}{m-1} = \dfrac{m^2+m}{m-1}&\\
+&\text{因为 } m>1, \text{所以分子 } m^2+m > 0, \text{分母 } m-1 > 0。&\\
+&\therefore n-m > 0 \implies n > m. \text{ 所以选项A正确。}&\\
+\\
+&3. \textbf{分析第二个方程}: m^2+n+4=4m+p&\\
+&p = m^2-4m+4+n = (m-2)^2+n&\\
+\\
+&4. \textbf{比较 p 和 n (选项C, D)}&\\
+&p-n = (m-2)^2 \ge 0&\\
+&\text{这意味着 } p \ge n. \text{ 仅当 m=2 时 p=n。}&\\
+&\text{所以选项C (p<n) 错误，选项D (n<p) 不总是成立。}&\\
+\\
+&5. \textbf{比较 p 和 m (选项B)}&\\
+&\text{我们已经证明了 } p \ge n \text{ 且 } n > m。&\\
+&\text{根据不等式的传递性，} p \ge n > m \implies p > m.&\\
+&\text{所以选项B也正确。}&\\
+\\
+&\textbf{结论}: \text{如果这是单选题，题目可能存在问题，因为A和B都正确。如果这是多选题，则选A和B。}&
+\end{flalign*}
+
+\end{liti}
