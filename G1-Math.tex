@@ -38,9 +38,10 @@
      },
      litistyle/.style={  %例题风格
      	common,
-      colframe=gray,%  
-      colback=gray!5,
-      colbacktitle=yellow, 
+      colframe=gray,% 
+      colback=white,
+      colbacktitle=yellow,
+      sharp corners,rounded corners=southeast,
       overlay unbroken and last={
       \node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
 		 },
@@ -217,5 +218,30 @@ $\therefore \big(x-\dfrac{1}{x}\big)_{max} = -9$。即 $x^2+9x-1=0。$
 
 \end{liti}
 
+\begin{liti}
+已知集合 $A=\{x|0\leq x\leq a\}$，集合 $B=\{ x|m^2+5\le x \le m^2+6\}$，若命题“ $\exists m\in R,A\cap B\neq\varnothing$ ”为假命题，则实数 $a$ 的取值范围为?
+\tcblower\kaishu
+\textbf{解题思路}：
+\begin{enumerate}
+    \item 首先，我们需要理解原命题及其否定。原命题为“存在一个实数$m$，使得集合$A$和$B$的交集不为空”。因为这个命题是假的，所以它的否定命题是真的。否定命题为：“对于任意实数$m$，集合$A$和$B$的交集都为空”，即 $\forall m \in \mathbb{R}, A \cap B = \varnothing$。
+    \item 接下来分析集合$A$和$B$的特点。集合$A=[0, a]$ 是一个固定的区间（当$a$确定时）。集合$B=[m^2+5, m^2+6]$ 是一个随着$m$变化的区间。
+    \item 我们的目标是找到满足“$\forall m \in \mathbb{R}, A \cap B = \varnothing$”的$a$的取值范围。
+\end{enumerate}
 
+\textbf{解答过程}：
+\begin{itemize}
+    \item 集合 $A = \{x|0 \le x \le a\} = [0, a]$。要使此集合为非空集合，则 $a \ge 0$。
+    \item 集合 $B = \{x|m^2+5 \le x \le m^2+6\} = [m^2+5, m^2+6]$。
+    因为 $m \in \mathbb{R}$，所以 $m^2 \ge 0$。
+    因此，集合$B$的左端点 $m^2+5 \ge 0^2+5=5$。
+    这意味着，对于任意实数$m$，集合$B$所代表的区间都完全位于数轴上点5的右侧（或包含点5）。
+    \item 条件“$\forall m \in \mathbb{R}, A \cap B = \varnothing$”意味着区间$[0, a]$与所有的区间$[m^2+5, m^2+6]$都没有公共部分。
+    \item 既然所有的$B$区间都在5或5的右边，那么为了使$A$和任何一个$B$都没有交集，$A$区间就必须在5的左边结束。
+    即$A$的右端点$a$必须小于$B$区间的最小左端点。
+    $B$区间的最小左端点是5（当$m=0$时）。
+    所以，我们必须有 $a < 5$。
+    \item 结合$a \ge 0$的前提，我们得到 $0 \le a < 5$。
+\end{itemize}
+因此，实数$a$的取值范围为 $[0, 5)$。
+\end{liti}
 \end{document}
