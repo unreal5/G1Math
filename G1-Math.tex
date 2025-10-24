@@ -3,8 +3,26 @@
 \geometry{inner=1.5cm,outer=1.5cm,top=2.45cm,bottom=1cm}
 \usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
 
+
+\RequirePackage{amssymb} % Must be loaded before unicode-math
+\RequirePackage{unicode-math} % Math fonts in xetexorluatex
+%\setmathfont{texgyrepagella-math.otf}
+\setmainfont{STIXTwoText}[
+	Path=./fonts/STIXTwoText/,
+  Extension = .otf,
+  UprightFont = STIXTwoMath-Regular,
+  BoldFont = STIXTwoText-SemiBold,
+  ItalicFont = STIXTwoText-Italic,
+  BoldItalicFont = STIXTwoText-BoldItalic,
+]
+\setmathfont{STIXTwoMath-Regular.otf}
+
 \usepackage{tikz,calc}
-\usetikzlibrary{calc,shadows.blur}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark}
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
 \usepackage[most]{tcolorbox}
 \tcbuselibrary{breakable, skins,theorems}
 
@@ -26,12 +44,13 @@
       breakable,
       top=8pt,
       before skip=8pt,
-      attach boxed title to top left={yshift=-0.11in,xshift=0.15in},
+      attach boxed title to top left={yshift=-0.05in,xshift=0.15in},
       boxed title style={
       	boxrule=0pt,
-        colframe=white,
+        colframe=black,
         arc=0pt,
-        outer arc=0pt
+        outer arc=0pt,
+        drop fuzzy shadow
      	},
       separator sign={.},
       drop fuzzy shadow
@@ -40,17 +59,41 @@
      	common,
       colframe=gray,% 
       colback=white,
-      colbacktitle=yellow,
+      colbacktitle=Gold,
       sharp corners,rounded corners=southeast,
       overlay unbroken and last={
       \node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
-		 },
-		 BreakableBox@title/.code n args={2}
-		      {
-		        \ifblank{#2}
-		          {\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
-		          {\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
-		      },
+         },
+% -----------------------------------------------------------------------------
+% Explanation: BreakableBox@title key
+% The following defines a pgfkeys/tcolorbox key named
+%   "BreakableBox@title" which accepts 2 arguments (see 
+%   "/.code n args={2}"). When the key is used like
+%   "BreakableBox@title={<env>}{<optTitle>}" the code below is executed
+%   with #1=<env> and #2=<optTitle>.
+%
+% Purpose:
+% - If the second argument (#2) is empty, set the tcolorbox title to
+%     \csname <env>name\endcsname~\thetcbcounter
+%   which expands to the environment name (e.g. "liti" -> \litiname)
+%   followed by the current counter value.
+% - If the second argument is provided, append " (#2)" to the title.
+%
+% Notes:
+% - This relies on \makeatletter being active so that keys with '@'
+%   are allowed in control sequence names.
+% - \ifblank is used to test whether #2 is empty; ensure the package
+%   that provides \ifblank (for example, etoolbox or xparse) is loaded
+%   earlier if necessary.
+% - Example usage inside the code: \tcbset{title={...}} sets the
+%   tcolorbox title key accordingly.
+%
+         BreakableBox@title/.code n args={2}
+              {
+                \ifblank{#2}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+              },
 }      
   % define an internal control sequence \newbreakablebox for fancy mode's newtheorem
   % #1 is the environment name, #2 is the prefix of label, #3 is the style
@@ -65,7 +108,8 @@
       \tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
     }{\relax}
     \DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
-        common,#3,
+        common, % use common style
+        #3, % use the style passed in
         IfValueTF={##1}
           {BreakableBox@title={#1}{##1}}
           {
@@ -95,6 +139,41 @@
   % we define headers like \definitionname before
   \newcommand{\litiname}{例题}
   \newbreakablebox{liti}{def}{litistyle}
+  
+  
+%补充内容
+%%设置新字体
+%%定义带圈数字命令
+\newfontfamily{\nmfont}{circlenumber}
+[%
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}%\kk{<参数范围1-95>}96、97、98、99分别用\quan{196} \quan{197} \quan{199} \quan{201}
+
+%脚注使用带圈数字
+\newcommand*\kkctr[1]{%
+  \protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+%%无悬挂脚注格式
+\renewcommand\@makefntext[1]{%
+  \setlength\parindent{2\ccwd}\selectfont
+  \@thefnmark\ #1}
+
+%修改\part，使其不分页
+\def\@endpart{%
+	\thispagestyle{empty}
+  \vskip40\p@%
+   \@afterheading}
+
+
+
+\RequirePackage{enumitem}
+%\newenvironment{myenum}{\begin{enumerate}[label=\protect\kk{\arabic*}]\small}{\end{enumerate}}%
+\setlist{noitemsep}
+\setlist[enumerate, 1]{label=\protect\kk{\arabic*},itemsep=0.5ex}  
 \makeatother
 
 
@@ -114,134 +193,85 @@
 }
 
 \usepackage{exam-zh-choices}
+\usepackage{fontawesome5}
 \begin{document}
-\section{数学作业}
-
-
-
+\section{2025年10月数学联考}
 
 \begin{liti}
-若正实数$a,b$满足$a+b=1$,则$ax^2+\big(3+\dfrac{1}{b}\big)x-a=0$的根的最大值为？
-\tcblower\kaishu
-设方程两根分别为$\alpha,\beta$，其中$\alpha\le\beta$。
-由韦达定理，$\alpha\times\beta=\dfrac{-a}{a}=-1$。
-因为$a$是正实数，所以方程必有一正根和一负根。因此，较大根 $\beta > 0$。
+不等式$ax^2+ax-1<0$对一切实数$x$恒成立的$a$的取值集合为$\mathbb{A}$，集合$\mathbb{B}=\{x|x^2+mx-2m-2<0\}$.
+\begin{enumerate}
+\item 求集合$\mathbb{A}$;
+\item 若“$x\in\mathbb{A}$”是“$x\in\mathbb{B}$”的充分条件，求$m$的取值范围.
+\end{enumerate}
 
-将$\beta$代入原方程，我们得到：$a\beta^2 + \left(3+\dfrac{1}{b}\right)\beta - a = 0$
-
-整理后可得：$a(1-\beta^2) = \left(3+\dfrac{1}{b}\right)\beta$
-
-因为 $a>0, b>0, \beta>0$，所以 $\left(3+\dfrac{1}{b}\right)\beta > 0$。
-因此，$a(1-\beta^2) > 0$，可推得 $1-\beta^2 > 0$，即 $0 < \beta < 1$。
-
-又因为 $a,b$为正实数且 $a+b=1$，所以 $0<a<1$ 且 $0<b<1$。
-
-将 $a=1-b$ 代入整理后的方程：
-$(1-b)(1-\beta^2) = \left(3+\dfrac{1}{b}\right)\beta = \dfrac{3b+1}{b}\beta$
-
-化简后得：$b-b^2-b\beta^2+b^2\beta^2 = 3b\beta+\beta$
-
-将上式整理为关于$b$的二次方程：
-$(\beta^2-1)b^2 + (1-3\beta-\beta^2)b - \beta = 0$
-
-再两边同时$\times -1$得：$(1-\beta^2)b^2 + (\beta^2+3\beta-1)b + \beta = 0$
-
-因为$b$是实数，所以该二次方程的判别式 $\Delta \ge 0$。
-
-$\Delta = (\beta^2+3\beta-1)^2 - 4(1-\beta^2)\beta \ge 0$
-
-$\beta^4+9\beta^2+1+6\beta^3-2\beta^2-6\beta - 4\beta+4\beta^3 \ge 0$
-
-$\beta^4+10\beta^3+7\beta^2-10\beta+1 \ge 0$
-
-由于 $\beta \ne 0$，不等式两边同除以 $\beta^2$：$\beta^2+10\beta+7-\dfrac{10}{\beta}+\dfrac{1}{\beta^2} \ge 0$
-
-$\left(\beta^2+\dfrac{1}{\beta^2}\right) + 10\left(\beta-\dfrac{1}{\beta}\right) + 7 \ge 0$
-
-令 $y=\beta-\dfrac{1}{\beta}$，则 $\beta^2+\dfrac{1}{\beta^2} = y^2+2$。
-
-代入不等式：$y^2+2 + 10y + 7 \ge 0$
-
-$y^2+10y+9 \ge 0$
-
-$(y+1)(y+9) \ge 0$
-
-解得 $y \ge -1$ 或 $y \le -9$。
-
-即 $\beta-\dfrac{1}{\beta} \ge -1$ 或 $\beta-\dfrac{1}{\beta} \le -9$。
-因为 $0 < \beta < 1$，所以 $\beta-\dfrac{1}{\beta} < 0$。
-
+\tcblower
+\begin{enumerate}
+\item 设函数$f(x)=ax^2+ax-1$。要使不等式$f(x)<0$对一切实数$x$恒成立, 必须分情况讨论$a$的取值.
 \begin{itemize}
-    \item 对于 $\beta-\dfrac{1}{\beta} \ge -1$：\\
-    因为 $\beta>0$，不等式两边同乘 $\beta$ 得 $\beta^2-1 \ge -\beta$，即 $\beta^2+\beta-1 \ge 0$。\\
-    解得 $\beta \ge \dfrac{-1+\sqrt{5}}{2}$ 或 $\beta \le \dfrac{-1-\sqrt{5}}{2}$。\\
-    此解与 $0 < \beta < 1$ 的区间没有交集，故此情况不成立。
-    \item 对于 $\beta-\dfrac{1}{\beta} \le -9$：\\
-    因为 $\beta>0$，不等式两边同乘 $\beta$ 得 $\beta^2-1 \le -9\beta$，即 $\beta^2+9\beta-1 \le 0$。\\
-    解得 $\dfrac{-9-\sqrt{85}}{2} \le \beta \le \dfrac{-9+\sqrt{85}}{2}$。
+    \item 若$a>0$, 则二次函数开口向上, 当$x\to\infty$时, $f(x)\to+\infty$, 不可能恒小于0.
+    \item 若$a=0$, 不等式变为$-1<0$, 恒成立. 所以$a=0$是解的一部分.
+    \item 若$a<0$, 二次函数开口向下. 为使$f(x)<0$恒成立, 其图像必须完全在$x$轴下方, 这意味着它与$x$轴没有交点, 即判别式必须小于0.
+    $\Delta = a^2 - 4(a)(-1) = a^2+4a < 0$.
+    解得$a(a+4)<0$, 即$-4 < a < 0$.
 \end{itemize}
+综合以上情况, $a$的取值范围是$(-4, 0]$. 因此, $\mathbb{A}=\{a|-4<a\le 0\}=(-4,0]$.
 
-综合 $0 < \beta < 1$ 和上述解集，我们得到 $\beta$ 的取值范围是 $0 < \beta \le \dfrac{-9+\sqrt{85}}{2}$。
-
-因此，根 $\beta$ 的最大值为 $\dfrac{-9+\sqrt{85}}{2}$。
-\newpage
-\textbf{\rmfamily 解法二：}
-
-设方程 $ax^2+\left(3+\dfrac{1}{b}\right)x-a=0$的两根为$x_1,x_2$。
-
-由韦达定理得： $x_1x_2 = \dfrac{-a}{a}=-1$。这表明方程必有一正根和一负根。我们要求的是根的最大值，即正根的最大值。
-
-设正根为 $x（x>0）$，则另一根为 $-\dfrac{1}{x}$。 
-
-$两根之和为 x_1+x_2 = x - \dfrac{1}{x} = -\dfrac{3+\dfrac{1}{b}}{a} = -\dfrac{3b+1}{ab}$。
-\vskip1.2ex
-
-利用“1的代换”得：$x - \dfrac{1}{x} = -\dfrac{3b+1}{ab} = -\dfrac{3b+a+b}{ab} = -\left(\dfrac{4b+a}{ab}\right) = -\left(\dfrac{4}{a}+\dfrac{1}{b}\right)$
-
-我们要求 $x$ 的最大值：
-
-$\because x>0，f(x)=x-\dfrac{1}{x}$ 是一个增函数。
-
-$\therefore$要使 $x$ 最大，就需要使 $x-\dfrac{1}{x} 最大$。
-
-这等价于求 $-\left(\dfrac{4}{a}+\dfrac{1}{b}\right)$ 的最大值，也就是求 $\left(\dfrac{4}{a}+\dfrac{1}{b}\right)$ 的最小值。
-
-\textbf{\rmfamily 权方和}：$\dfrac{4}{a}+\dfrac{1}{b}  \ge \dfrac{(2+1)^2}{a+b} = 9$。当且仅当 $\dfrac{2}{a}=\dfrac{1}{b}$，即 $a=2b$ 时取等。
-
-又$\because a+b=1 \therefore 2b+b=1 \implies b=\dfrac{1}{3}, a=\dfrac{2}{3}。$
-
-$\therefore \big(x-\dfrac{1}{x}\big)_{max} = -9$。即 $x^2+9x-1=0。$
-
-解得 $x=\dfrac{-9\pm\sqrt{81+4}}{2}$。
-
-又$\because x>0$，$\therefore x=\dfrac{-9+\sqrt{85}}{2}$。
-
+\item 题目条件“$x\in\mathbb{A}$”是“$x\in\mathbb{B}$”的充分条件, 即$\mathbb{A}\subseteq\mathbb{B}$.\\
+将第(1)问求出的集合$\mathbb{A}$代入, 有$(-4,0]\subseteq\{x|x^2+mx-2m-2<0\}$.\\
+设$g(x)=x^2+mx-2m-2$. 要使$(-4,0]\subseteq\{x|g(x)<0\}$, 需要$g(x)<0$在区间$(-4,0]$上恒成立.\\
+由于$g(x)$是一个开口向上的抛物线, 要使其在闭区间上小于0, 只需保证在区间端点处函数值小于等于0即可.\\
+即$g(-4)\le 0$且$g(0)\le 0$.
+\begin{itemize}
+    \item $g(-4) = (-4)^2 + m(-4) - 2m - 2 = 16 - 4m - 2m - 2 = 14 - 6m \le 0 \implies m \ge \frac{14}{6} = \frac{7}{3}$.
+    \item $g(0) = 0^2 + m(0) - 2m - 2 = -2m - 2 \le 0 \implies -2m \le 2 \implies m \ge -1$.
+\end{itemize}
+要同时满足两个条件, 必须取它们的交集, 即$m\ge\frac{7}{3}$.
+因此, $m$的取值范围是$[\frac{7}{3}, +\infty)$.
+\end{enumerate}
 \end{liti}
 
 \begin{liti}
-已知集合 $A=\{x|0\leq x\leq a\}$，集合 $B=\{ x|m^2+5\le x \le m^2+6\}$，若命题“ $\exists m\in R,A\cap B\neq\varnothing$ ”为假命题，则实数 $a$ 的取值范围为?
-\tcblower\kaishu
-\textbf{解题思路}：
 \begin{enumerate}
-    \item 首先，我们需要理解原命题及其否定。原命题为“存在一个实数$m$，使得集合$A$和$B$的交集不为空”。因为这个命题是假的，所以它的否定命题是真的。否定命题为：“对于任意实数$m$，集合$A$和$B$的交集都为空”，即 $\forall m \in \mathbb{R}, A \cap B = \varnothing$。
-    \item 接下来分析集合$A$和$B$的特点。集合$A=[0, a]$ 是一个固定的区间（当$a$确定时）。集合$B=[m^2+5, m^2+6]$ 是一个随着$m$变化的区间。
-    \item 我们的目标是找到满足“$\forall m \in \mathbb{R}, A \cap B = \varnothing$”的$a$的取值范围。
+\item 若$ax^2-ax+1>0$的解集为$\{x|x \neq b\}$，求$a,b$的值；
+\item 当$x\geq 1$时，$ax^2-ax+1>-a+2$恒成立，求$a$的取值范围；
+\item 求关于$x$的不等式$ax^2-ax+1>3x-2$的解集。
+\end{enumerate}
+\tcblower
+
+\begin{enumerate}
+\item 因为不等式$ax^2-ax+1>0$的解集为$\{x|x \neq b\}$, 说明抛物线$y=ax^2-ax+1$开口向上, 且与$x$轴只有一个交点.\\
+所以$a>0$且判别式$\Delta = (-a)^2 - 4a = a^2-4a=0$.\\
+解得$a=4$.\\
+此时不等式为$4x^2-4x+1>0$, 即$(2x-1)^2>0$, 解集为$\{x|x\neq \frac{1}{2}\}$.\\
+所以$b=\frac{1}{2}$.\\
+综上, $a=4, b=\frac{1}{2}$.
+
+\item 当$x\geq 1$时, $ax^2-ax+1>-a+2$恒成立, 即$a(x^2-x+1)-1>0$恒成立.\\
+设$g(x)=a(x^2-x+1)-1$.\\
+令$h(x)=x^2-x+1=(x-\frac{1}{2})^2+\frac{3}{4}$.\\
+当$x\ge 1$时, $h(x)$是增函数, 所以$h(x)_{\min}=h(1)=1$.\\
+\begin{itemize}
+    \item 若$a>0$, $g(x)$的最小值为$a \cdot h(x)_{\min}-1 = a-1$.
+    要使$g(x)>0$恒成立, 只需$a-1>0$, 解得$a>1$.
+    \item 若$a=0$, 不等式变为$1>2$, 不成立.
+    \item 若$a<0$, $g(x)$随$h(x)$的增大而减小. 由于$h(x)$在$[1, +\infty)$上无上界, $g(x)$无下界, 不可能恒大于0.
+\end{itemize}
+所以$a$的取值范围是$(1, +\infty)$.
+
+\item 不等式$ax^2-ax+1>3x-2$可化为$ax^2-(a+3)x+3>0$.
+因式分解得$(ax-3)(x-1)>0$.
+\begin{itemize}
+    \item 当$a>0$时, 抛物线开口向上. 两根为$x=1$和$x=3/a$.
+    \begin{itemize}
+        \item 若$a>3$, 则$3/a < 1$. 解集为$x<3/a$或$x>1$.
+        \item 若$a=3$, 则$3/a=1$. 不等式为$3(x-1)^2>0$, 解集为$x\neq 1$.
+        \item 若$0<a<3$, 则$3/a > 1$. 解集为$x<1$或$x>3/a$.
+    \end{itemize}
+    \item 当$a=0$时, 不等式为$-3x+3>0$, 解集为$x<1$.
+    \item 当$a<0$时, 抛物线开口向下. 两根$x=1$和$x=3/a$. 因为$a<0$, 所以$3/a<0<1$.
+    解集为$3/a < x < 1$.
+\end{itemize}
 \end{enumerate}
 
-\textbf{解答过程}：
-\begin{itemize}
-    \item 集合 $A = \{x|0 \le x \le a\} = [0, a]$。要使此集合为非空集合，则 $a \ge 0$。
-    \item 集合 $B = \{x|m^2+5 \le x \le m^2+6\} = [m^2+5, m^2+6]$。
-    因为 $m \in \mathbb{R}$，所以 $m^2 \ge 0$。
-    因此，集合$B$的左端点 $m^2+5 \ge 0^2+5=5$。
-    这意味着，对于任意实数$m$，集合$B$所代表的区间都完全位于数轴上点5的右侧（或包含点5）。
-    \item 条件“$\forall m \in \mathbb{R}, A \cap B = \varnothing$”意味着区间$[0, a]$与所有的区间$[m^2+5, m^2+6]$都没有公共部分。
-    \item 既然所有的$B$区间都在5或5的右边，那么为了使$A$和任何一个$B$都没有交集，$A$区间就必须在5的左边结束。
-    即$A$的右端点$a$必须小于$B$区间的最小左端点。
-    $B$区间的最小左端点是5（当$m=0$时）。
-    所以，我们必须有 $a < 5$。
-    \item 结合$a \ge 0$的前提，我们得到 $0 \le a < 5$。
-\end{itemize}
-因此，实数$a$的取值范围为 $[0, 5)$。
 \end{liti}
 \end{document}

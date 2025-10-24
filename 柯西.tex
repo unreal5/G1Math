@@ -1,0 +1,34 @@
+\begin{liti}
+柯西关键记着：方和积$\geq$积和方。
+\vspace{2ex}
+
+$\Big(a\tikzmark{a}^2+b\tikzmark{b}^2\Big)\times\Big(c\tikzmark{c}^2+d\tikzmark{d}^2\Big)\geq \Big(a\tikzmark{ac}c+b\tikzmark{bd}d\Big)^2$
+\vspace{2ex}
+
+\begin{tikzpicture}[remember picture,overlay,]
+	\path[draw=red,thick] (pic cs:a) edge[xshift=-1mm,bend right,out=-90,in=-90]  (pic cs:c);
+	\path[draw=red,thick] (pic cs:c) edge[bend right,out=-90,in=-90] (pic cs:ac);
+	%
+	\path[draw=blue,thick] (pic cs:b)[xshift=-1mm,yshift=2mm] edge[bend left,out=90,in=90]  (pic cs:d);
+	\path[draw=blue,thick] (pic cs:d) edge[bend left,out=90,in=90] (pic cs:bd);
+\end{tikzpicture}
+可灵活运用：简单记住“$\geq$”后面的项是前面的项先开方，然后$\Big(1项\times 3项 +2项 \times 4项\Big)^2$。反向也应掌握。
+
+解题步骤：
+\begin{enumerate}
+\item 高次在左，低次在右
+\item 暴力配凑
+\end{enumerate}
+\tcblower
+求函数$y=5\sqrt{x-1}+\sqrt{10-2x}$的最大值。
+
+$\sqrt{10-2x}$拆成$\sqrt{2}\sqrt{5-x}$，目的是前项有$x-1$，后项配凑$(5-x)$，可以抵消。
+
+原式$=\Big[(x-1) + (5-x)\Big]\times(5^2+(\sqrt{2})^2)\geq \big(\sqrt{x-1}\times 5+\sqrt{5-x}\times \sqrt{2}\big)^2$
+
+$\therefore 4\times 27\ge \big(\sqrt{x-1}\times 5+\sqrt{5-x}\times \sqrt{2}\big)^2$
+
+$\therefore 6\sqrt{3}\ge \sqrt{x-1}\times 5+\sqrt{5-x}\times \sqrt{2}$
+
+由此题得出的经验是：寻找\textbf{和定}或\textbf{积定}。
+\end{liti}
