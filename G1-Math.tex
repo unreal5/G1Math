@@ -195,83 +195,55 @@ Path=./fonts/]
 \usepackage{exam-zh-choices}
 \usepackage{fontawesome5}
 \begin{document}
-\section{2025年10月数学联考}
+\section{数学}
+%\begin{liti}
+%（2024河南月考）f(x)=x|x|，满足f(2x-1)+f(x)$\leq$0
+%\end{liti}
+%\begin{liti}
+%（2024甘肃月考）$函数y=f(x)是定义在[-2,2]上的单调减函数，且f(a+1)<f(2a)，实数a的范围是$
+%
+%\end{liti}
 
 \begin{liti}
-不等式$ax^2+ax-1<0$对一切实数$x$恒成立的$a$的取值集合为$\mathbb{A}$，集合$\mathbb{B}=\{x|x^2+mx-2m-2<0\}$.
+（2024福建月考）$函数f(x)是定义域为(-1,1)上的单调减函数，若f(x)图像关于点(0,1)对称，则满足f(x-1)<f(x)<2的x的取值范围是$
+\tcblower\small\kaishu
+解抽象不等式，利用的是两个基本性质：
 \begin{enumerate}
-\item 求集合$\mathbb{A}$;
-\item 若“$x\in\mathbb{A}$”是“$x\in\mathbb{B}$”的充分条件，求$m$的取值范围.
+\item 奇偶性
+\item 单调性
 \end{enumerate}
+现在函数关于(0,1)对称，不是关于原点，也不关于$y$轴对称，肯定不具有奇偶性，需要变形（平移）。下称一个单位即可关于(0,0)对称。设新函数为$g(x)$，则有：
 
-\tcblower
-\begin{enumerate}
-\item 设函数$f(x)=ax^2+ax-1$。要使不等式$f(x)<0$对一切实数$x$恒成立, 必须分情况讨论$a$的取值.
-\begin{itemize}
-    \item 若$a>0$, 则二次函数开口向上, 当$x\to\infty$时, $f(x)\to+\infty$, 不可能恒小于0.
-    \item 若$a=0$, 不等式变为$-1<0$, 恒成立. 所以$a=0$是解的一部分.
-    \item 若$a<0$, 二次函数开口向下. 为使$f(x)<0$恒成立, 其图像必须完全在$x$轴下方, 这意味着它与$x$轴没有交点, 即判别式必须小于0.
-    $\Delta = a^2 - 4(a)(-1) = a^2+4a < 0$.
-    解得$a(a+4)<0$, 即$-4 < a < 0$.
-\end{itemize}
-综合以上情况, $a$的取值范围是$(-4, 0]$. 因此, $\mathbb{A}=\{a|-4<a\le 0\}=(-4,0]$.
+$f(x)=g(x)+1$，则$g(x-1)+1+g(x)+1<2$。利用\textbf{f、f在两边}把$g(x)$分成两边：
 
-\item 题目条件“$x\in\mathbb{A}$”是“$x\in\mathbb{B}$”的充分条件, 即$\mathbb{A}\subseteq\mathbb{B}$.\\
-将第(1)问求出的集合$\mathbb{A}$代入, 有$(-4,0]\subseteq\{x|x^2+mx-2m-2<0\}$.\\
-设$g(x)=x^2+mx-2m-2$. 要使$(-4,0]\subseteq\{x|g(x)<0\}$, 需要$g(x)<0$在区间$(-4,0]$上恒成立.\\
-由于$g(x)$是一个开口向上的抛物线, 要使其在闭区间上小于0, 只需保证在区间端点处函数值小于等于0即可.\\
-即$g(-4)\le 0$且$g(0)\le 0$.
-\begin{itemize}
-    \item $g(-4) = (-4)^2 + m(-4) - 2m - 2 = 16 - 4m - 2m - 2 = 14 - 6m \le 0 \implies m \ge \frac{14}{6} = \frac{7}{3}$.
-    \item $g(0) = 0^2 + m(0) - 2m - 2 = -2m - 2 \le 0 \implies -2m \le 2 \implies m \ge -1$.
-\end{itemize}
-要同时满足两个条件, 必须取它们的交集, 即$m\ge\frac{7}{3}$.
-因此, $m$的取值范围是$[\frac{7}{3}, +\infty)$.
-\end{enumerate}
+$g(x-1)<-g(x)$，$g(x)$又是奇函数，因此$g(x-1)<g(-x)$；再利用单调减得（取交集）：
+\[
+x的取值范围：
+\begin{cases}
+x-1>-x\\
+-1<x<1\\
+-1<x-1<1
+\end{cases}
+\]
+
 \end{liti}
 
+
 \begin{liti}
-\begin{enumerate}
-\item 若$ax^2-ax+1>0$的解集为$\{x|x \neq b\}$，求$a,b$的值；
-\item 当$x\geq 1$时，$ax^2-ax+1>-a+2$恒成立，求$a$的取值范围；
-\item 求关于$x$的不等式$ax^2-ax+1>3x-2$的解集。
-\end{enumerate}
-\tcblower
-
-\begin{enumerate}
-\item 因为不等式$ax^2-ax+1>0$的解集为$\{x|x \neq b\}$, 说明抛物线$y=ax^2-ax+1$开口向上, 且与$x$轴只有一个交点.\\
-所以$a>0$且判别式$\Delta = (-a)^2 - 4a = a^2-4a=0$.\\
-解得$a=4$.\\
-此时不等式为$4x^2-4x+1>0$, 即$(2x-1)^2>0$, 解集为$\{x|x\neq \frac{1}{2}\}$.\\
-所以$b=\frac{1}{2}$.\\
-综上, $a=4, b=\frac{1}{2}$.
-
-\item 当$x\geq 1$时, $ax^2-ax+1>-a+2$恒成立, 即$a(x^2-x+1)-1>0$恒成立.\\
-设$g(x)=a(x^2-x+1)-1$.\\
-令$h(x)=x^2-x+1=(x-\frac{1}{2})^2+\frac{3}{4}$.\\
-当$x\ge 1$时, $h(x)$是增函数, 所以$h(x)_{\min}=h(1)=1$.\\
-\begin{itemize}
-    \item 若$a>0$, $g(x)$的最小值为$a \cdot h(x)_{\min}-1 = a-1$.
-    要使$g(x)>0$恒成立, 只需$a-1>0$, 解得$a>1$.
-    \item 若$a=0$, 不等式变为$1>2$, 不成立.
-    \item 若$a<0$, $g(x)$随$h(x)$的增大而减小. 由于$h(x)$在$[1, +\infty)$上无上界, $g(x)$无下界, 不可能恒大于0.
-\end{itemize}
-所以$a$的取值范围是$(1, +\infty)$.
-
-\item 不等式$ax^2-ax+1>3x-2$可化为$ax^2-(a+3)x+3>0$.
-因式分解得$(ax-3)(x-1)>0$.
-\begin{itemize}
-    \item 当$a>0$时, 抛物线开口向上. 两根为$x=1$和$x=3/a$.
-    \begin{itemize}
-        \item 若$a>3$, 则$3/a < 1$. 解集为$x<3/a$或$x>1$.
-        \item 若$a=3$, 则$3/a=1$. 不等式为$3(x-1)^2>0$, 解集为$x\neq 1$.
-        \item 若$0<a<3$, 则$3/a > 1$. 解集为$x<1$或$x>3/a$.
-    \end{itemize}
-    \item 当$a=0$时, 不等式为$-3x+3>0$, 解集为$x<1$.
-    \item 当$a<0$时, 抛物线开口向下. 两根$x=1$和$x=3/a$. 因为$a<0$, 所以$3/a<0<1$.
-    解集为$3/a < x < 1$.
-\end{itemize}
-\end{enumerate}
+\textcolor{red}{\bfseries 2024重庆期中} 函数$f(x)$偶函数，且$f(x)$在$(0,+\infty)$上是增函数，$x\in[\dfrac{1}{2},1]$时，不等式$f(ax+1)\leq f(x-2)$恒成立，则实数$a$的取值范围是
+\begin{choices}
+\item [-2,2]
+\item [-2,0]
+\item [0,2]
+\item (-2,2)
+\end{choices}
+\tcblower\kaishu\small
+按前面所述，\textbf{f,f分两边}，现在已经分两边了，再利用单调性，则实数$a$需要同时满足以下几个条件（取交集）
+\[\begin{cases}
+ax+1\leq x-2\\
+\dfrac{1}{2}\leq x-2 \leq 1\\
+\dfrac{1}{2}\leq ax+1 \leq 1
+\end{cases}\]
 
 \end{liti}
 \end{document}
