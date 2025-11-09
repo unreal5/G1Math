@@ -1,0 +1,406 @@
+\documentclass[CJKmath,a4paper,10pt]{ctexart}
+\usepackage{geometry}
+\geometry{inner=1.5cm,outer=1.5cm,top=2.45cm,bottom=1cm}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+
+
+\RequirePackage{amssymb} % Must be loaded before unicode-math
+\RequirePackage{unicode-math} % Math fonts in xetexorluatex
+%\setmathfont{texgyrepagella-math.otf}
+%\setmainfont{STIXTwoText}[
+%	Path=./fonts/STIXTwoText/,
+%  Extension = .otf,
+%  UprightFont = STIXTwoMath-Regular,
+%  BoldFont = STIXTwoText-SemiBold,
+%  ItalicFont = STIXTwoText-Italic,
+%  BoldItalicFont = STIXTwoText-BoldItalic,
+%]
+%\setmathfont{STIXTwoMath-Regular.otf}
+
+\usepackage{tikz,calc}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark}
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins,theorems}
+
+
+\usepackage{xkeyval}
+\makeatletter 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xkeyval} 
+\usepackage{zhlipsum}
+\tcbset{
+    common/.style={
+      fontupper=\rmfamily,
+      lower separated=true,
+      coltitle=black,
+      colback=gray!5,
+      boxrule=0.5pt,
+      fonttitle=\bfseries,
+      enhanced,
+      breakable,
+      top=8pt,
+      before skip=8pt,
+      attach boxed title to top left={yshift=-0.05in,xshift=0.15in},
+      boxed title style={
+      	boxrule=0pt,
+        colframe=black,
+        arc=0pt,
+        outer arc=0pt,
+        drop fuzzy shadow
+     	},
+      separator sign={.},
+      drop fuzzy shadow
+     },
+     litistyle/.style={  %例题风格
+     	common,
+      colframe=gray,% 
+      colback=white,
+      colbacktitle=Gold,
+      sharp corners,rounded corners=southeast,
+      overlay unbroken and last={
+      \node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
+         },
+% -----------------------------------------------------------------------------
+% Explanation: BreakableBox@title key
+% The following defines a pgfkeys/tcolorbox key named
+%   "BreakableBox@title" which accepts 2 arguments (see 
+%   "/.code n args={2}"). When the key is used like
+%   "BreakableBox@title={<env>}{<optTitle>}" the code below is executed
+%   with #1=<env> and #2=<optTitle>.
+%
+% Purpose:
+% - If the second argument (#2) is empty, set the tcolorbox title to
+%     \csname <env>name\endcsname~\thetcbcounter
+%   which expands to the environment name (e.g. "liti" -> \litiname)
+%   followed by the current counter value.
+% - If the second argument is provided, append " (#2)" to the title.
+%
+% Notes:
+% - This relies on \makeatletter being active so that keys with '@'
+%   are allowed in control sequence names.
+% - \ifblank is used to test whether #2 is empty; ensure the package
+%   that provides \ifblank (for example, etoolbox or xparse) is loaded
+%   earlier if necessary.
+% - Example usage inside the code: \tcbset{title={...}} sets the
+%   tcolorbox title key accordingly.
+%
+         BreakableBox@title/.code n args={2}
+              {
+                \ifblank{#2}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+              },
+}      
+  % define an internal control sequence \newbreakablebox for fancy mode's newtheorem
+  % #1 is the environment name, #2 is the prefix of label, #3 is the style
+  % style: thmstyle, defstyle, prostyle
+  % e.g. \newbreakablebox{theorem}{thm}{thmstyle}
+  % will define two environments: numbered ``theorem'' and no-numbered ``theorem*''
+  % WARNING FOR MULTILINGUAL: this cs will automatically find \theoremname's definition,
+  % WARNING FOR MULTILINGUAL: it should be defined in language settings.
+  \newcommand{\newbreakablebox}[3]{
+    \ifcsundef{#1name}{%
+      % define a default name if not defined before
+      \tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+    }{\relax}
+    \DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+        common, % use common style
+        #3, % use the style passed in
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+        IfValueT={##4}
+          {
+            IfBooleanTF={##3}
+              {label={##4}}
+              {VIVID@label={#2}{##4}}
+          }
+      }
+    \DeclareTColorBox{#1*}{ g o }{
+        common,#3,
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+      }
+  }
+  % define several environment 
+  % we define headers like \definitionname before
+  \newcommand{\litiname}{例题}
+  \newbreakablebox{liti}{def}{litistyle}
+  
+  
+%补充内容
+%%设置新字体
+%%定义带圈数字命令
+\newfontfamily{\nmfont}{circlenumber}
+[%
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}%\kk{<参数范围1-95>}96、97、98、99分别用\quan{196} \quan{197} \quan{199} \quan{201}
+
+%脚注使用带圈数字
+\newcommand*\kkctr[1]{%
+  \protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+%%无悬挂脚注格式
+\renewcommand\@makefntext[1]{%
+  \setlength\parindent{2\ccwd}\selectfont
+  \@thefnmark\ #1}
+
+%修改\part，使其不分页
+\def\@endpart{%
+	\thispagestyle{empty}
+  \vskip40\p@%
+   \@afterheading}
+
+
+
+\RequirePackage{enumitem}
+%\newenvironment{myenum}{\begin{enumerate}[label=\protect\kk{\arabic*}]\small}{\end{enumerate}}%
+\setlist{noitemsep}
+\setlist[enumerate, 1]{label=\protect\kk{\arabic*},itemsep=0.5ex}  
+\makeatother
+
+
+
+%%%marker环境
+\newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
+	after skip=3mm,fontupper=\rmfamily,
+	boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+	colback=yellow!50,colframe=yellow!20!black,
+	sharp corners,rounded corners=southeast,
+	arc is angular,arc=3mm,underlay={%
+		\path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+	},
+	drop fuzzy shadow,#1
+}
+\begin{document}
+\section{函数单调性九大题型}
+\subsection{考点一: 单调性判定、证明}
+\begin{liti}
+已知函数 \(f(x) = ax - \frac{1}{x}\)，且 \(f(-2) = -\frac{3}{2}\)。
+\begin{enumerate}
+    \item 求函数 \(f(x)\) 的解析式；
+    \item 判断函数在区间 \((0, +\infty)\) 上的单调性并用定义法加以证明。
+\end{enumerate}
+\small
+\tcblower
+解：
+\begin{enumerate}
+    \item 由 \(f(-2) = -2a + \frac{1}{2} = -\frac{3}{2}\)，解得 \(a = 1\)，故 \(f(x) = x - \frac{1}{x}\)；
+    \item 函数在 \((0, +\infty)\) 上单调递增。证明如下：
+          设 \(0 < x_1 < x_2\)，则
+          \[
+          f(x_1) - f(x_2) = \left(x_1 - \frac{1}{x_1}\right) - \left(x_2 - \frac{1}{x_2}\right) = (x_1 - x_2) + \frac{x_1 - x_2}{x_1x_2} = (x_1 - x_2)\left(1 + \frac{1}{x_1x_2}\right)
+          \]
+          因 \(x_1 - x_2 < 0\)，\(1 + \frac{1}{x_1x_2} > 0\)，故 \(f(x_1) - f(x_2) < 0\)，即 \(f(x_1) < f(x_2)\)，因此 \(f(x)\) 在 \((0, +\infty)\) 上单调递增。
+\end{enumerate}
+\end{liti}
+
+\begin{liti}
+已知函数 \(f(x) = \frac{1}{x^2 - 4}\)。
+\begin{enumerate}
+    \item 求函数 \(f(x)\) 的定义域；
+    \item 判断函数 \(f(x)\) 在 \((2, +\infty)\) 上的单调性，并用定义加以证明。
+\end{enumerate}
+\tcblower 解：
+\begin{enumerate}
+    \item 定义域为 \(x^2 - 4 \neq 0\)，得$x\neq \pm 2$，即 \(x \in (-\infty, -2) \cup (-2, 2) \cup (2, +\infty)\)；
+    \item 函数在 \((2, +\infty)\) 上单调递减。证明如下：
+          设 \(x_2 > x_1 > 2\)，\\
+          则：
+          $
+          f(x_1) - f(x_2) = \frac{1}{x_1^2 - 4} - \frac{1}{x_2^2 - 4} = \frac{(x_2 - x_1)(x_2 + x_1)}{(x_1^2 - 4)(x_2^2 - 4)}
+          $\\
+          \(\because x_2 - x_1 > 0\)，\(x_2 + x_1 > 0\)，\(x_1^2 - 4 > 0\)，\(x_2^2 - 4 > 0\)，故 \(f(x_1) - f(x_2) > 0\)，即 \(f(x_1) > f(x_2)\)，因此 \(f(x)\) 在 \((2, +\infty)\) 上单调递减。
+\end{enumerate}
+\end{liti}
+
+\begin{liti}
+判断并证明函数 \(f(x) = ax^2 + \frac{1}{x}\)（其中 \(1 < a < 3\)）在 \([1, 2]\) 上的单调性。
+
+\tcblower 解：函数在 \([1, 2]\) 上单调递增。证明如下：
+设 \(1 \leq x_1 < x_2 \leq 2\)，则
+\[
+f(x_1) - f(x_2) = a(x_1^2 - x_2^2) + \left(\frac{1}{x_1} - \frac{1}{x_2}\right) = (x_1 - x_2)\left[a(x_1 + x_2) - \frac{1}{x_1x_2}\right]
+\]
+因 \(x_1 - x_2 < 0\)，\(a(x_1 + x_2) > 2\)，\(\frac{1}{x_1x_2} < 1\)，故 \(a(x_1 + x_2) - \frac{1}{x_1x_2} > 0\)，因此 \(f(x_1) - f(x_2) < 0\)，即 \(f(x_1) < f(x_2)\)，故 \(f(x)\) 在 \([1, 2]\) 上单调递增。
+\end{liti}
+\subsection{考点二: 求函数单调区间}
+\begin{liti}
+求函数 \(f(x) = \frac{x}{1 - x}\) 的单调区间。
+
+\tcblower 解析：化简 \(f(x) = -1 + \frac{1}{1 - x}\)，由复合函数单调性可知，单调递增区间为 \((-\infty, 1)\) 和 \((1, +\infty)\)。
+\end{liti}
+
+\begin{liti}
+（2021·陕西省咸阳中学模拟）求函数 \(f(x) = -x^2 + 2|x| + 1\) 的单调区间。
+
+\tcblower 解析：
+- 当 \(x \geq 0\) 时，\(f(x) = -x^2 + 2x + 1\)，开口向下，对称轴为 \(x = 1\)，增区间为 \((0, 1)\)，减区间为 \((1, +\infty)\)；
+- 当 \(x < 0\) 时，\(f(x) = -x^2 - 2x + 1\)，开口向下，对称轴为 \(x = -1\)，增区间为 \((-\infty, -1)\)，减区间为 \((-1, 0)\)；
+综上，增区间为 \((-\infty, -1)\) 和 \((0, 1)\)，减区间为 \((-1, 0)\) 和 \((1, +\infty)\)。
+\end{liti}
+
+\begin{liti}
+（2022·四川省通宁中学模拟）求函数 \(f(x) = |x^2 - 3x + 2|\) 的单调递增区间。
+
+\tcblower 解析：令 \(t = x^2 - 3x + 2 = (x - 1)(x - 2)\)，画图可知，单调递增区间为 \((1, \frac{3}{2})\) 和 \((2, +\infty)\)。
+\end{liti}
+
+\subsection{考点三: 求复合函数的单调区间}
+\begin{liti}
+求函数 \(y = \frac{1}{4 + 3x - x^2}\) 的单调递增区间。
+
+\tcblower 解析：令 \(t = -x^2 + 3x + 4\)（定义域 \(t \neq 0\)，即 \(x \in (-\infty, -1) \cup (-1, 4) \cup (4, +\infty)\)），\(y = \frac{1}{t}\) 单调递减。由“同增异减”：
+- \(t = -x^2 + 3x + 4\) 的增区间为 \((-\infty, \frac{3}{2})\)，减区间为 \((\frac{3}{2}, +\infty)\)；
+故 \(y\) 的单调递增区间为 \((\frac{3}{2}, 4)\)。
+\end{liti}
+
+\begin{liti}
+求函数 \(f(x) = \sqrt{x^2 - 2x - 3}\) 的单调递增区间。
+
+\tcblower 解析：令 \(t = x^2 - 2x - 3\)（定义域 \(t \geq 0\)，即 \(x \in (-\infty, -1] \cup [3, +\infty)\)），\(y = \sqrt{t}\) 单调递增。由“同增异减”：
+- \(t = x^2 - 2x - 3\) 的增区间为 \([1, +\infty)\)；
+故 \(f(x)\) 的单调递增区间为 \([3, +\infty)\)。
+\end{liti}
+
+\subsection{考点四: 利用单调性确定参数取值范围}
+\begin{liti}
+若函数 \(f(x) = x^2 - 2mx + 1\) 在 \((2, +\infty)\) 上是增函数，则实数 \(m\) 的取值范围是\_\_\_。
+
+\tcblower 解析：二次函数对称轴为 \(x = m\)，增区间为 \([m, +\infty)\)，故 \(m \leq 2\)，答案：\(m \leq 2\)。
+\end{liti}
+
+\begin{liti}
+已知函数 \(f(x) = -mx^2 + 3x + 1\) 在区间 \((-1, +\infty)\) 上是增函数，求实数 \(m\) 的取值范围。
+
+\tcblower 解析：
+- 当 \(m = 0\) 时，\(f(x) = 3x + 1\) 在 \(\mathbb{R}\) 上递增，满足条件；
+- 当 \(m \neq 0\) 时，二次函数开口向下（\(-m > 0 \Rightarrow m < 0\)），对称轴 \(x = \frac{3}{2m}\)，需 \(\frac{3}{2m} \leq -1\)，解得 \(-\frac{3}{2} \leq m < 0\)；
+综上，\(m \in [-\frac{3}{2}, 0]\)。
+\end{liti}
+
+\begin{liti}
+函数 \(f(x) = \frac{ax + 1}{x + 2}\) 在区间 \((-2, +\infty)\) 上单调递增，求实数 \(a\) 的取值范围。
+
+\tcblower 解析：化简 \(f(x) = a + \frac{1 - 2a}{x + 2}\)，由反比例函数单调性，需 \(1 - 2a < 0\)，解得 \(a > \frac{1}{2}\)，答案：\(a > \frac{1}{2}\)。
+\end{liti}
+
+\begin{liti}
+已知函数 \(f(x) = |-3x + a|\) 的单调递减区间是 \((-\infty, 4]\)，则实数 \(a\) 的值为\_\_\_。
+
+\tcblower 解析：\(f(x) = 3|x - \frac{a}{3}|\)，单调递减区间为 \((-\infty, \frac{a}{3}]\)，故 \(\frac{a}{3} = 4 \Rightarrow a = 12\)，答案：\(12\)。
+\end{liti}
+\subsection{考点五: 利用单调性比较大小}
+\begin{liti}
+定义在 \(\mathbb{R}\) 上的函数 \(f(x)\) 满足：对任意的 \(x_1, x_2 \in [0, +\infty)\)（\(x_1 \neq x_2\)），有 \(\frac{f(x_2) - f(x_1)}{x_2 - x_1} < 0\)。则下列选项正确的是（  ）
+A. \(f(3) < f(2) < f(4)\)  B. \(f(1) < f(2) < f(3)\)  C. \(f(-2) < f(1) < f(3)\)  D. \(f(3) < f(1) < f(0)\)
+
+\tcblower 解析：由条件知 \(f(x)\) 在 \([0, +\infty)\) 上单调递减，且 \(f(x)\) 为偶函数（隐含性质），故 \(f(3) < f(1) < f(0)\)，答案：D。
+\end{liti}
+
+\begin{liti}
+（2022·全国·高一专题练习）函数 \(y = f(x)\) 在 \(\mathbb{R}\) 上是增函数，若 \(a + b \leq 0\)，则有（  ）
+A. \(f(a) + f(b) \leq -f(a) - f(b)\)  B. \(f(a) + f(b) \geq -f(a) - f(b)\)  C. \(f(a) + f(b) \leq f(-a) + f(-b)\)  D. \(f(a)f(b) > f(-a)f(-b)\)
+
+\tcblower 解析：由 \(a \leq -b\) 得 \(f(a) \leq f(-b)\)，由 \(b \leq -a\) 得 \(f(b) \leq f(-a)\)，故 \(f(a) + f(b) \leq f(-a) + f(-b)\)，答案：C。
+\end{liti}
+
+\subsection{考点六: 利用函数的单调性解决不等式问题}
+\begin{liti}
+已知函数 \(f(x)\) 在 \([-2, 2]\) 上单调递减，且 \(f(a^2 - a) > f(2a - 2)\)，则实数 \(a\) 的取值范围为\_\_\_。
+
+\tcblower 解析：由单调性得 \(\begin{cases} -2 \leq a^2 - a \leq 2 \\ -2 \leq 2a - 2 \leq 2 \\ a^2 - a < 2a - 2 \end{cases}\)，解得 \(a \in [0, 1)\)，答案：\([0, 1)\)。
+\end{liti}
+
+
+\begin{liti}
+（2021·湖南省娄底市二中模拟）已知函数 \(f(x)\) 为 \((0, +\infty)\) 上的增函数，若 \(f(a^2 - a) > f(a + 3)\)，则实数 \(a\) 的取值范围为\_\_\_。
+
+\tcblower 解析：由单调性得 \(\begin{cases} a^2 - a > 0 \\ a + 3 > 0 \\ a^2 - a > a + 3 \end{cases}\)，解得 \(a \in (-3, -1) \cup (3, +\infty)\)，答案：\((-3, -1) \cup (3, +\infty)\)。
+\end{liti}
+
+
+\begin{liti}
+已知函数 \(f(x)\) 对任意的 \(a, b \in \mathbb{R}\)，都有 \(f(a + b) = f(a) + f(b) - 2\)，且当 \(x > 0\) 时，\(f(x) > 2\)。
+\begin{enumerate}
+    \item 证明：\(f(x)\) 是 \(\mathbb{R}\) 上的增函数；
+    \item 若 \(f(4) = 5\)，解不等式 \(f(m^2 - m) < \frac{7}{2}\)。
+\end{enumerate}
+
+\tcblower 解析：
+\begin{enumerate}
+    \item 设 \(x_1 > x_2\)，则 \(x_1 - x_2 > 0\)，\(f(x_1 - x_2) > 2\)，故 \(f(x_1) = f(x_2 + (x_1 - x_2)) = f(x_2) + f(x_1 - x_2) - 2 > f(x_2)\)，即 \(f(x)\) 单调递增；
+    \item 令 \(a = b = 2\)，得 \(f(4) = 2f(2) - 2 = 5 \Rightarrow f(2) = \frac{7}{2}\)，不等式化为 \(f(m^2 - m) < f(2)\)，故 \(m^2 - m < 2\)，解得 \(-1 < m < 2\)。
+\end{enumerate}
+\end{liti}
+
+\subsection{考点七: 最值（值域）问题}
+\begin{liti}
+当 \(-3 \leq x \leq -1\) 时，函数 \(f(x) = \frac{5x - 1}{4x + 2}\) 的最小值为\_\_\_。
+
+\tcblower 解析：分离常数得 \(f(x) = \frac{5}{4} - \frac{7}{2(4x + 2)}\)，在 \([-3, -1]\) 上单调递增，最小值为 \(f(-3) = \frac{8}{5}\)，答案：\(\frac{8}{5}\)。
+\end{liti}
+
+\begin{liti}
+函数 \(y = x^2 - x + 1\) 在区间 \([-1, 1]\) 上的最大值与最小值之和为\_\_\_。
+
+\tcblower 解析：对称轴为 \(x = \frac{1}{2}\)，最小值 \(f(\frac{1}{2}) = \frac{3}{4}\)，最大值 \(f(-1) = 3\)，和为 \(\frac{15}{4}\)，答案：\(\frac{15}{4}\)。
+\end{liti}
+
+\begin{liti}
+画出函数 \(y = -x(|x - 2| - 2)\)（\(x \in [-1, 5]\)）的图象，并根据图象指出函数的单调区间和最大、最小值。
+
+\tcblower 解析：
+- 当 \(x \leq 2\) 时，\(y = x^2\)；当 \(x > 2\) 时，\(y = -x^2 + 4x\)；
+- 增区间：\((0, 2)\)，减区间：\([-1, 0)\) 和 \((2, 5]\)；
+- 最大值 \(f(2) = 4\)，最小值 \(f(5) = -5\)。
+\end{liti}
+
+\subsection{考点八: 恒成立与能成立问题}
+\begin{liti}
+已知函数 \(f(x) = \frac{2x + 1}{x + 1}\)（\(x \geq 0\)）。
+\begin{enumerate}
+    \item 证明：\(f(x)\) 在区间 \([0, +\infty)\) 上为增函数；
+    \item 若在 \([0, 2]\) 上存在实数 \(x_0\)，使得 \(f(x_0) > \frac{m}{3} + 1\) 成立，求正数 \(m\) 的取值范围。
+\end{enumerate}
+
+\tcblower 解析：
+\begin{enumerate}
+    \item 设 \(0 \leq x_1 < x_2\)，则 \(f(x_1) - f(x_2) = \frac{x_1 - x_2}{(x_1 + 1)(x_2 + 1)} < 0\)，故 \(f(x)\) 单调递增；
+    \item \(f(x)\) 在 \([0, 2]\) 上的最大值为 \(f(2) = \frac{5}{3}\)，由题意得 \(\frac{5}{3} > \frac{m}{3} + 1 \Rightarrow m < 2\)，故 \(0 < m < 2\)。
+\end{enumerate}
+\end{liti}
+
+\begin{liti}
+已知函数 \(f(x) = (x - 2)|x - a| + 1\)。
+\begin{enumerate}
+    \item 当 \(a = 4\) 时，写出 \(f(x)\) 的单调区间；
+    \item 若存在 \(x \in [3, 5]\)，使得 \(f(x) > 5\)，求实数 \(a\) 的取值范围。
+\end{enumerate}
+
+\tcblower 解析：
+\begin{enumerate}
+    \item 当 \(a = 4\) 时，\(f(x) = \begin{cases} (x - 2)(x - 4) + 1, x \geq 4 \\ (x - 2)(4 - x) + 1, x < 4 \end{cases}\)，增区间：\((-\infty, 3)\) 和 \([4, +\infty)\)，减区间：\([3, 4)\)；
+    \item 不等式化为 \((x - 2)|x - a| > 4\)，即 \(a < x - \frac{4}{x - 2}\) 或 \(a > x + \frac{4}{x - 2}\)。由最值得 \(a < 4\) 或 \(a > 6\)。
+\end{enumerate}
+\end{liti}
+\end{document}

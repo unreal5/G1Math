@@ -1,0 +1,158 @@
+\documentclass[CJKmath]{exam-zh}
+\examsetup{
+	page/size=a4paper,
+	paren/show-answer=true,
+	solution/show-solution=show-stay,
+}
+\begin{document}
+\section{恒成立、存在性问题}
+
+\begin{question}
+已知关于$x$的不等式$2x-1 > m(x^2-1)$
+\begin{enumerate}
+    \item 是否存在实数$m$，使不等式对任意$x \in \mathbb{R}$恒成立？
+    \item 若不等式对于$x \in (1, +\infty)$恒成立，求$m$的取值范围.
+    \item 若不等式对于$m \in [-2, 2]$恒成立，求实数$x$的取值范围.
+\end{enumerate}
+\begin{solution}
+原不等式等价于$-mx^2+2x+(m-1)>0$。
+
+1) 若对$\forall x\in\mathbb R$恒成立，则当$|x|\to\infty$，左侧$\sim -m x^2$必须不趋于$-\infty$，故需$m\le 0$；又代入$x=0$得$-1>-m$，即$m>1$，矛盾，故\textbf{不存在}这样的$m$。
+
+2) 对于$x\in(1,\infty)$恒成立，当$x>1$时$x^2-1>0$，可写成
+$$m<\frac{2x-1}{x^2-1}=:\varphi(x).$$
+对$x>1$，有$\varphi'(x)=-\dfrac{2(x^2-x+1)}{(x^2-1)^2}<0$，故$\varphi$在$(1,\infty)$单调递减，
+$\inf\varphi(x)=\lim\limits_{x\to\infty}\varphi(x)=0$，且$\varphi(x)>0$。因此$\,m\le 0$。
+
+3) 要对所有$m\in[-2,2]$恒成立，相当于
+$$2x-1>\max_{m\in[-2,2]} \{m(x^2-1)\}=\begin{cases}2(x^2-1),&|x|>1,\\-2(x^2-1),&|x|<1,\\0,&|x|=1.\end{cases}$$
+分别求解：
+- $|x|>1$: $2x-1>2(x^2-1)\iff 2x^2-2x-1<0\iff \dfrac{1-\sqrt3}{2}<x<\dfrac{1+\sqrt3}{2}$，与$|x|>1$取交，得$x\in\big(1,\tfrac{1+\sqrt3}{2}\big)$；
+- $|x|<1$: $2x-1>-2(x^2-1)\iff 2x^2+2x-3>0$，两根为$\dfrac{-1\pm\sqrt7}{2}$，在$|x|<1$内取$x>\tfrac{-1+\sqrt7}{2}$，即$x\in\big(\tfrac{-1+\sqrt7}{2},1\big)$；
+- $|x|=1$: $x=1$成立，$x=-1$不成立。
+
+综上，$x\in\big(\tfrac{-1+\sqrt7}{2},\tfrac{1+\sqrt3}{2}\big)$。
+
+答案：
+(1) 不存在；(2) $m\le 0$；(3) $x\in\big(\tfrac{-1+\sqrt7}{2},\tfrac{1+\sqrt3}{2}\big)$。
+\end{solution}
+\end{question}
+
+\begin{question}
+$f(x) = \sqrt{(m^2 - m - 6)x^2 + (m + 2)x + 8}$
+\begin{enumerate}
+    \item 若$f(x)$的定义域为$[-1, 2]$，求$m = \underline{\qquad\qquad}$
+    \item 若$f(x)$的定义域为$\mathbb{R}$，求实数$m$的取值范围.
+    \item 若$f(x)$的值域为$[0, +\infty)$，求实数$m$的取值范围.
+    \item 若$f(x)$的值域为$[1, +\infty)$，则$m = \underline{\quad}$
+\end{enumerate}
+\end{question}
+
+\begin{question}
+\begin{enumerate}
+    \item 若不等式$\dfrac{1}{x} + \dfrac{1}{1 - 4x} - m \geq 0$对$x \in (0, \dfrac{1}{4})$恒成立，则$m$的最大值为$\underline{\qquad\qquad}$
+    \item 若存在$x \in \mathbb{R}$使$|x - 1| + |x + 2| \leq m$，求$m$的取值范围.
+    \item 若存在$x \in [1, 3]$使$x^2 - 2mx + m^2 - 1 < 0$成立，求$m$的取值范围.
+\end{enumerate}
+\end{question}
+
+\begin{question}{（口诀）：“\textbf{任意}”即“扛住最坏情况”，“\textbf{存在}”即“只要有一个即可”}
+\begin{enumerate}
+    \item 已知$f(x) = x^2 - x + 3$，$g(x) = 2x - a$，若对$\forall x_1 \in [0, 2]$，$\exists x_2 \in [0, 2]$使$f(x_1) \geq g(x_2)$，求$a$的取值范围.
+    \begin{itemize}
+        \item 变式1：$\forall x_1 \in [0, 2], \forall x_2 \in [0, 2]$
+        \item 变式2：$\exists x_1 \in [0, 2], \forall x_2 \in [0, 2]$
+        \item 变式3：$\exists x_1 \in [0, 2], \exists x_2 \in [0, 2]$
+    \end{itemize}
+    \item 已知$f(x) = x^2$，$g(x) = 4 - x^2$，若对$\forall x_1 \in [0, 2]$，$\exists x_2 \in [0, 2]$使$f(x_1) + g(x_2) \geq c$，求$c$的取值范围.
+\end{enumerate}
+\end{question}
+
+\begin{question}
+已知对于$\forall x_1 \in (2, 3)$，$\exists x_2 \in (1, 2)$使$f(x_2) = g(x_1)$成立，其中$f(x) = -2x + 8 - 4a$，$g(x) = x^2 - 2ax$，求$a$的取值范围.
+\end{question}
+
+\section{函数性质应用压轴题}
+\begin{question}
+已知$f(x)$，$x \in \mathbb{R}$，$\forall x_1,x_2 \in (0,+\infty)$且$x_1 \neq x_2$，$\dfrac{x_2f(x_1)-x_1f(x_2)}{x_1-x_2} > 0$，$f(x)$为奇函数，$f(2025)=2025$，则不等式$f(x) > x$的解集为$\underline{\qquad\qquad}$.
+\end{question}
+
+\begin{question}
+已知$f(x)$，$x \in \mathbb{R}$，$\forall x,y \in \mathbb{R}$，$f(x)f(y)=f(x+y)$，且$f(1)=\dfrac{1}{2}$，则\paren
+\begin{choices}
+\item  $f(0)=0$
+\item  $f(-1)=2$
+\item  $f(x+1)=f(x)$
+\item  $f(x+2)-f(x+11) < f(x+1)-f(x)$
+\end{choices}
+\end{question}
+
+
+\begin{question}
+已知$f(x)$为$\mathbb{R}$上的奇函数，且$f(1-x)=f(1+x)$，若$f(1)=2$，则$f(1)+f(2)+\dots+f(2025)=$\paren
+\begin{choices}
+\item $0$
+\item  $2025$
+\item  $2024$
+\item  $2$
+\end{choices}
+\end{question}
+
+\begin{question}
+已知$f(x)$为$\mathbb{R}$上的奇函数，当$x_1,x_2 \in (0,+\infty)$，$\dfrac{x_2f(x_1)-x_1f(x_2)}{x_1-x_2} > 0$，$f(6)=6$，则不等式$f(x) > x$的解集为\paren[B]
+\begin{choices}
+\item  $(-\infty,-6)\cup(0,6)$
+\item  $(-6,0)\cup(6,+\infty)$
+\item  $(-6,0)\cup(0,6)$
+\item  $(-\infty,-6)\cup(6,+\infty)$
+\end{choices}
+\end{question}
+
+\begin{question}
+已知$f(x)$，$x \in \mathbb{R}$，$f(x+4)$为偶函数，$f(-x+2)$为奇函数，且$f(x)$在$[0,2]\uparrow$，则下列错误的是\paren
+
+\begin{choices}
+\item  $f(2)=0$
+\item  $x=4$是$f(x)$的一条对称轴
+\item  $f(x)$在$[4,8]\downarrow$
+\item  $f(1) < f(7)$
+\end{choices}
+\end{question}
+
+\begin{question}
+$f(x)$，$x \in (0,+\infty)$，当$x_1 \neq x_2$时，$\dfrac{x_2f(x_1)-x_1f(x_2)}{x_1-x_2} > 0$，则\paren
+\begin{choices}
+\item $3f(4) > 4f(3)$
+\item  $y=\dfrac{f(x)}{x}$在$(0,+\infty)\uparrow$
+\item  $y=xf(x)$在$(0,+\infty)\uparrow$
+\item  $f(3x_1+x_2)+f(x_1+3x_2) > 4f(x_1+x_2)$
+\end{choices}
+\end{question}
+
+\begin{question}
+若定义在$(-1,1)$上的$f(x)$不恒为$0$，对$\forall x,y \in (-1,1)$都有$f(x)+f(y)=f\left(\dfrac{x+y}{1+xy}\right)$，且当$x \in (-1,0)$时，$f(x) > 0$，则\paren
+\begin{choices}
+\item  $f(0)=0$
+\item  $f(x)$为奇函数
+\item  $f\left(\dfrac{1}{3}\right)+f\left(\dfrac{1}{4}\right) > f\left(\dfrac{1}{2}\right)$
+\item  $f(x)$在$(0,1)\downarrow$
+\end{choices}
+\end{question}
+
+\begin{question}
+已知$f(x)=\begin{cases} x^2+(1-a)x-2a+b,\ &x < 1 \\ \dfrac{a+1}{x}+2x,\ &x \geq 1 \end{cases}$，对于$\forall x_1,x_2 \in \mathbb{R}$且$x_1 \neq x_2$，$\dfrac{f(x_1)-f(x_2)}{x_1-x_2} < 2$成立，则$a$的取值范围为$\underline{\quad\quad\quad}$.
+\end{question}
+
+\begin{question}
+设$f(x)$为$\mathbb{R}$上的奇函数，$\forall x_1,x_2 \in (0,+\infty)$，$x_1 \neq x_2$，$\dfrac{x_2f(x_1)-x_1f(x_2)}{x_1-x_2} > 0$，若$f(2)=4$，则$f(x)-2x \leq 0$的解集为$\underline{\quad\quad\quad}$.
+\end{question}
+
+\begin{question}
+$f(x)$，$x \in \mathbb{R}$，$\forall x,y \in \mathbb{R}$，$f(xy)=f(x)f(y)$，且$f(-1)=-1$，当$0 < x < 1$时$f(x) \in (0,1)$.
+    \begin{enumerate}
+        \item 判断$f(x)$的奇偶性；
+        \item 判断$f(x)$在$(0,+\infty)$的单调性并证明；
+        \item $\forall x_1,x_2 \in [-1,1]$，$a \in [-1,5]$，总有$2\big|f(x_1)-f(x_2)\big| \leq m^2-am-2$恒成立，求$m$的取值范围.
+    \end{enumerate}
+\end{question}    
+\end{document}

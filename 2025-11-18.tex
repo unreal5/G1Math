@@ -1,0 +1,239 @@
+\documentclass[CJKmath,a4paper,10pt]{ctexart}
+\usepackage{geometry}
+\geometry{inner=1.5cm,outer=1.5cm,top=2.45cm,bottom=1cm}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+
+
+\RequirePackage{amssymb} % Must be loaded before unicode-math
+\RequirePackage{unicode-math} % Math fonts in xetexorluatex
+\setmathfont{texgyrepagella-math.otf}
+\setmainfont{STIXTwoText}[
+	Path=./fonts/STIXTwoText/,
+  Extension = .otf,
+  UprightFont = STIXTwoMath-Regular,
+  BoldFont = STIXTwoText-SemiBold,
+  ItalicFont = STIXTwoText-Italic,
+  BoldItalicFont = STIXTwoText-BoldItalic,
+]
+%\setmathfont{STIXTwoMath-Regular.otf}
+
+\usepackage{tikz,calc}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark}
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins,theorems}
+
+
+\usepackage{xkeyval}
+\makeatletter 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xkeyval} 
+\usepackage{zhlipsum}
+\tcbset{
+    common/.style={
+      fontupper=\rmfamily,
+      lower separated=true,
+      coltitle=black,
+      colback=gray!5,
+      boxrule=0.5pt,
+      fonttitle=\bfseries,
+      enhanced,
+      breakable,
+      top=8pt,
+      before skip=8pt,
+      attach boxed title to top left={yshift=-0.05in,xshift=0.15in},
+      boxed title style={
+      	boxrule=0pt,
+        colframe=black,
+        arc=0pt,
+        outer arc=0pt,
+        drop fuzzy shadow
+     	},
+      separator sign={.},
+      drop fuzzy shadow
+     },
+     litistyle/.style={  %例题风格
+     	common,
+      colframe=gray,% 
+      colback=white,
+      colbacktitle=Gold,
+      sharp corners,rounded corners=southeast,
+      overlay unbroken and last={
+      \node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
+         },
+% -----------------------------------------------------------------------------
+% Explanation: BreakableBox@title key
+% The following defines a pgfkeys/tcolorbox key named
+%   "BreakableBox@title" which accepts 2 arguments (see 
+%   "/.code n args={2}"). When the key is used like
+%   "BreakableBox@title={<env>}{<optTitle>}" the code below is executed
+%   with #1=<env> and #2=<optTitle>.
+%
+% Purpose:
+% - If the second argument (#2) is empty, set the tcolorbox title to
+%     \csname <env>name\endcsname~\thetcbcounter
+%   which expands to the environment name (e.g. "liti" -> \litiname)
+%   followed by the current counter value.
+% - If the second argument is provided, append " (#2)" to the title.
+%
+% Notes:
+% - This relies on \makeatletter being active so that keys with '@'
+%   are allowed in control sequence names.
+% - \ifblank is used to test whether #2 is empty; ensure the package
+%   that provides \ifblank (for example, etoolbox or xparse) is loaded
+%   earlier if necessary.
+% - Example usage inside the code: \tcbset{title={...}} sets the
+%   tcolorbox title key accordingly.
+%
+         BreakableBox@title/.code n args={2}
+              {
+                \ifblank{#2}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+              },
+}      
+  % define an internal control sequence \newbreakablebox for fancy mode's newtheorem
+  % #1 is the environment name, #2 is the prefix of label, #3 is the style
+  % style: thmstyle, defstyle, prostyle
+  % e.g. \newbreakablebox{theorem}{thm}{thmstyle}
+  % will define two environments: numbered ``theorem'' and no-numbered ``theorem*''
+  % WARNING FOR MULTILINGUAL: this cs will automatically find \theoremname's definition,
+  % WARNING FOR MULTILINGUAL: it should be defined in language settings.
+  \newcommand{\newbreakablebox}[3]{
+    \ifcsundef{#1name}{%
+      % define a default name if not defined before
+      \tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+    }{\relax}
+    \DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+        common, % use common style
+        #3, % use the style passed in
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+        IfValueT={##4}
+          {
+            IfBooleanTF={##3}
+              {label={##4}}
+              {VIVID@label={#2}{##4}}
+          }
+      }
+    \DeclareTColorBox{#1*}{ g o }{
+        common,#3,
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+      }
+  }
+  % define several environment 
+  % we define headers like \definitionname before
+  \newcommand{\litiname}{例题}
+  \newbreakablebox{liti}{def}{litistyle}
+  
+  
+%补充内容
+%%设置新字体
+%%定义带圈数字命令
+\newfontfamily{\nmfont}{circlenumber}
+[%
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}%\kk{<参数范围1-95>}96、97、98、99分别用\quan{196} \quan{197} \quan{199} \quan{201}
+
+%脚注使用带圈数字
+\newcommand*\kkctr[1]{%
+  \protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+%%无悬挂脚注格式
+\renewcommand\@makefntext[1]{%
+  \setlength\parindent{2\ccwd}\selectfont
+  \@thefnmark\ #1}
+
+%修改\part，使其不分页
+\def\@endpart{%
+	\thispagestyle{empty}
+  \vskip40\p@%
+   \@afterheading}
+
+
+
+\RequirePackage{enumitem}
+%\newenvironment{myenum}{\begin{enumerate}[label=\protect\kk{\arabic*}]\small}{\end{enumerate}}%
+\setlist{noitemsep}
+\setlist[enumerate, 1]{label=\protect\kk{\arabic*},itemsep=0.5ex}  
+\makeatother
+
+
+
+%%%marker环境
+\newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
+	after skip=3mm,fontupper=\rmfamily,
+	boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+	colback=yellow!50,colframe=yellow!20!black,
+	sharp corners,rounded corners=southeast,
+	arc is angular,arc=3mm,underlay={%
+		\path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+	},
+	drop fuzzy shadow,#1
+}
+\begin{document}
+\section{作业}
+\begin{liti}
+若$f(x)=\frac{x^4-2x^2+9}{x^2},g(x)=x^2-tx+\frac{9}{2},\quad\forall x_1\in [1,2],\exists x_2\in[2,3],g(x_1)<f(x_2)$，求t的取值范围
+\tcblower\small
+\textbf{解：}
+条件：“对任意 $x_1\in [1,2]$，都存在 $x_2\in[2,3]$，使得 $g(x_1)<f(x_2)$ 成立”。
+等价于 $g(x)$ 在区间 $[1,2]$ 上的最大值小于 $f(x)$ 在区间 $[2,3]$ 上的最大值。
+
+即：$\max_{x_1 \in [1,2]} g(x_1) < \max_{x_2 \in [2,3]} f(x_2)$
+\begin{enumerate}
+\item \textbf{求 $f(x)$ 在 $[2,3]$ 上的最大值}:
+化简函数 $f(x)$：$ f(x) = \frac{x^4-2x^2+9}{x^2} = x^2 - 2 + \frac{9}{x^2} $.\\
+令$\lambda=x^2，则f(\lambda)=\lambda+\frac{9}{\lambda}-2,(\lambda\in[4,9])$。对勾函数，$f(\lambda)$ 在 $[4,9]$ 上是单调递增函数。\\
+当 $\lambda =9\quad(x_2=3)$ 时，取得最大值：$ \max_{\lambda \in [4,9]} f(\lambda) = f(9) = 9 +1- 2 = 8 $
+
+\item \textbf{求 $g(x)$ 在 $[1,2]$ 上的最大值}：
+函数 $g(x) = x^2-tx+\frac{9}{2}$ 是一个开口向上的二次函数，其对称轴为 $x = \frac{t}{2}$。
+根据对称轴的位置分情况讨论 $g(x)$ 在区间 $[1,2]$ 上的最大值。
+\begin{itemize}
+    \item 当对称轴在区间中点或偏左时，即 $\dfrac{t}{2} \leq \dfrac{1+2}{2} = \dfrac{3}{2}$（$t \leq 3$），函数在区间的右端点 $x_1=2$ 处取得最大值。
+    \[ \max_{x_1 \in [1,2]} g(x_1) = g(2) = 2^2 - 2t + \frac{9}{2} = \frac{17}{2} - 2t \]
+    \item 当对称轴在区间中点偏右时，即 $\dfrac{t}{2} > \dfrac{3}{2}$（$t > 3$），函数在区间的左端点 $x_1=1$ 处取得最大值。
+    \[ \max_{x_1 \in [1,2]} g(x_1) = g(1) = 1^2 - t + \frac{9}{2} = \frac{11}{2} - t \]
+\end{itemize}
+
+\item \textbf{建立关于 $t$ 的不等式并求解}：
+我们将第二步的结果代入不等关系 $\max g(x_1) < 8$ 中。
+\begin{itemize}
+    \item 当 $t \leq 3$ 时：
+    \[ \frac{17}{2} - 2t < 8 \implies 17 - 4t < 16 \implies 1 < 4t \implies t > \frac{1}{4} \]
+    结合前提条件 $t \leq 3$，得到 $\dfrac{1}{4} < t \leq 3$。
+    \item 当 $t > 3$ 时：
+    \[ \frac{11}{2} - t < 8 \implies 11 - 2t < 16 \implies -5 < 2t \implies t > -\frac{5}{2} \]
+    结合前提条件 $t > 3$，得到 $t > 3$。
+\end{itemize}
+
+\item \textbf{合并结果：}
+将两种情况下的 $t$ 的范围取并集：
+$ \left(\frac{1}{4}, 3\right] \cup (3, \infty) = \left(\frac{1}{4}, \infty\right) $
+
+\item \textbf{综上}：
+实数 $t$ 的取值范围是 $\left(\dfrac{1}{4}, +\infty\right)$。
+\end{enumerate}
+\end{liti}
+\end{document}

@@ -1,0 +1,451 @@
+\documentclass[CJKmath,a4paper,10pt]{ctexart}
+\usepackage{geometry}
+\geometry{inner=1.5cm,outer=1.5cm,top=2.45cm,bottom=1cm}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+
+
+\RequirePackage{amssymb} % Must be loaded before unicode-math
+\RequirePackage{unicode-math} % Math fonts in xetexorluatex
+%\setmathfont{texgyrepagella-math.otf}
+%\setmainfont{STIXTwoText}[
+%	Path=./fonts/STIXTwoText/,
+%  Extension = .otf,
+%  UprightFont = STIXTwoMath-Regular,
+%  BoldFont = STIXTwoText-SemiBold,
+%  ItalicFont = STIXTwoText-Italic,
+%  BoldItalicFont = STIXTwoText-BoldItalic,
+%]
+%\setmathfont{STIXTwoMath-Regular.otf}
+
+\usepackage{tikz,calc}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark}
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins,theorems}
+
+
+\usepackage{xkeyval}
+\makeatletter 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xkeyval} 
+\usepackage{zhlipsum}
+\tcbset{
+    common/.style={
+      fontupper=\rmfamily,
+      lower separated=true,
+      coltitle=black,
+      colback=gray!5,
+      boxrule=0.5pt,
+      fonttitle=\bfseries,
+      enhanced,
+      breakable,
+      top=8pt,
+      before skip=8pt,
+      attach boxed title to top left={yshift=-0.05in,xshift=0.15in},
+      boxed title style={
+      	boxrule=0pt,
+        colframe=black,
+        arc=0pt,
+        outer arc=0pt,
+        drop fuzzy shadow
+     	},
+      separator sign={.},
+      drop fuzzy shadow
+     },
+     litistyle/.style={  %例题风格
+     	common,
+      colframe=gray,% 
+      colback=white,
+      colbacktitle=Gold,
+      sharp corners,rounded corners=southeast,
+      overlay unbroken and last={
+      \node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
+         },
+% -----------------------------------------------------------------------------
+% Explanation: BreakableBox@title key
+% The following defines a pgfkeys/tcolorbox key named
+%   "BreakableBox@title" which accepts 2 arguments (see 
+%   "/.code n args={2}"). When the key is used like
+%   "BreakableBox@title={<env>}{<optTitle>}" the code below is executed
+%   with #1=<env> and #2=<optTitle>.
+%
+% Purpose:
+% - If the second argument (#2) is empty, set the tcolorbox title to
+%     \csname <env>name\endcsname~\thetcbcounter
+%   which expands to the environment name (e.g. "liti" -> \litiname)
+%   followed by the current counter value.
+% - If the second argument is provided, append " (#2)" to the title.
+%
+% Notes:
+% - This relies on \makeatletter being active so that keys with '@'
+%   are allowed in control sequence names.
+% - \ifblank is used to test whether #2 is empty; ensure the package
+%   that provides \ifblank (for example, etoolbox or xparse) is loaded
+%   earlier if necessary.
+% - Example usage inside the code: \tcbset{title={...}} sets the
+%   tcolorbox title key accordingly.
+%
+         BreakableBox@title/.code n args={2}
+              {
+                \ifblank{#2}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+                  {\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+              },
+}      
+  % define an internal control sequence \newbreakablebox for fancy mode's newtheorem
+  % #1 is the environment name, #2 is the prefix of label, #3 is the style
+  % style: thmstyle, defstyle, prostyle
+  % e.g. \newbreakablebox{theorem}{thm}{thmstyle}
+  % will define two environments: numbered ``theorem'' and no-numbered ``theorem*''
+  % WARNING FOR MULTILINGUAL: this cs will automatically find \theoremname's definition,
+  % WARNING FOR MULTILINGUAL: it should be defined in language settings.
+  \newcommand{\newbreakablebox}[3]{
+    \ifcsundef{#1name}{%
+      % define a default name if not defined before
+      \tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+    }{\relax}
+    \DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+        common, % use common style
+        #3, % use the style passed in
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+        IfValueT={##4}
+          {
+            IfBooleanTF={##3}
+              {label={##4}}
+              {VIVID@label={#2}{##4}}
+          }
+      }
+    \DeclareTColorBox{#1*}{ g o }{
+        common,#3,
+        IfValueTF={##1}
+          {BreakableBox@title={#1}{##1}}
+          {
+            IfValueTF={##2}
+            {BreakableBox@title={#1}{##2}}
+            {BreakableBox@title={#1}{}}
+          },
+      }
+  }
+  % define several environment 
+  % we define headers like \definitionname before
+  \newcommand{\litiname}{例题}
+  \newbreakablebox{liti}{def}{litistyle}
+  
+  
+%补充内容
+%%设置新字体
+%%定义带圈数字命令
+\newfontfamily{\nmfont}{circlenumber}
+[%
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}%\kk{<参数范围1-95>}96、97、98、99分别用\quan{196} \quan{197} \quan{199} \quan{201}
+
+%脚注使用带圈数字
+\newcommand*\kkctr[1]{%
+  \protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+%%无悬挂脚注格式
+\renewcommand\@makefntext[1]{%
+  \setlength\parindent{2\ccwd}\selectfont
+  \@thefnmark\ #1}
+
+%修改\part，使其不分页
+\def\@endpart{%
+	\thispagestyle{empty}
+  \vskip40\p@%
+   \@afterheading}
+
+
+
+\RequirePackage{enumitem}
+%\newenvironment{myenum}{\begin{enumerate}[label=\protect\kk{\arabic*}]\small}{\end{enumerate}}%
+\setlist{noitemsep}
+\setlist[enumerate, 1]{label=\protect\kk{\arabic*},itemsep=0.5ex}  
+\makeatother
+
+
+
+%%%marker环境
+\newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
+	after skip=3mm,fontupper=\rmfamily,
+	boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+	colback=yellow!50,colframe=yellow!20!black,
+	sharp corners,rounded corners=southeast,
+	arc is angular,arc=3mm,underlay={%
+		\path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+	},
+	drop fuzzy shadow,#1
+}
+\begin{document}
+
+
+
+\section{解答题（本题共5小题，共77分）}
+\begin{liti}
+已知命题 \(p\)：实数 \(x\) 满足 \(x^2-10x+16 \leq 0\)，命题 \(q\)：实数 \(x\) 满足 \(x^2-4mx+3m^2 \leq 0\)（其中 \(m>0\)）。
+\begin{enumerate}
+	\item 若 \(m=1\)，且命题 \(p\) 和 \(q\) 中至少有一个为真命题，求实数 \(x\) 的取值范围；
+	\item 若 \(q\) 是 \(p\) 的充分条件，求实数 \(m\) 的取值范围。
+\end{enumerate}
+\tcblower
+\textbf{解：}
+
+命题 \(p\)：由 \(x^2-10x+16 \leq 0\) 得 \((x-2)(x-8) \leq 0\)，解得 \(2 \leq x \leq 8\)。
+
+命题 \(q\)： \(x^2-4mx+3m^2 \leq 0\) 得 \((x-m)(x-3m) \leq 0\)。因为 \(m>0\)，所以 \(m < 3m\)。\(\therefore 命题q\)：\(m \leq x \leq 3m\)。
+
+\begin{enumerate}
+    \item 当 \(m=1\) 时，\(q\)：\(1 \leq x \leq 3\)。
+    
+    因为命题 \(p\) 和 \(q\) 中至少有一个为真命题，所以 \(x\) 的取值范围是两个不等式解集的并集。
+    
+    即 \(\{x \mid 2 \leq x \leq 8\} \cup \{x \mid 1 \leq x \leq 3\} = \{x \mid 1 \leq x \leq 8\}\)。
+    
+    所以实数 \(x\) 的取值范围是 \([1, 8]\)。
+    
+    \item “\(q\) 是 \(p\) 的充分条件”等价于 \(q \implies p\)，即命题 \(q\) 成立的 \(x\) 集合是命题 \(p\) 成立的 \(x\) 集合的\textbf{子集}。
+    
+    即 \([m, 3m] \subseteq [2, 8]\)。
+    
+    \begin{flalign*}
+    &   所以需要满足：
+    \begin{cases}
+        m \geq 2 \\
+        3m \leq 8
+    \end{cases}&
+    \end{flalign*}
+    解得 \(2 \leq m \leq \dfrac{8}{3}\)。
+    
+    这个结果满足 \(m>0\) 的前提。
+    
+    所以实数 \(m\) 的取值范围是 \(\left[2, \dfrac{8}{3}\right]\)。
+\end{enumerate}
+\end{liti}
+
+
+
+\begin{liti}
+已知函数 \(f(x)=ax^2-(a+2)x+b\)。
+    \begin{enumerate}
+        \item[(1)] 若 \(f(x) \leq 0\) 的解集为 \(\{x \mid 1 \leq x \leq 2\}\)，求 \(a,b\) 的值；
+        \item[(2)] 若 \(b=2\)，求不等式 \(f(x) \leq 0\) 的解集；
+        \item[(3)] 在(1)的条件下，若对任意 \(x>1\)，不等式 \(\dfrac{f(x)+1}{ax-1} \geq 2k^2+k\) 恒成立，求实数 \(k\) 的取值范围。
+    \end{enumerate}
+\tcblower
+\textbf{解：}
+\begin{enumerate}
+    \item[(1)]
+    $\because$不等式 \(f(x) \leq 0\) 的解集为 \(\{x \mid 1 \leq x \leq 2\}\)，这说明抛物线 \(y=f(x)\) 开口向上，且方程 \(ax^2-(a+2)x+b=0\) 的两个根是 1 和 2。\\
+    \(\therefore a>0\)。
+    \begin{flalign*}
+    &根据韦达定理：
+    \begin{cases}
+        1+2 = \dfrac{a+2}{a} \\
+        1 \times 2 = \dfrac{b}{a}
+    \end{cases},\quad
+     求解，得：\begin{cases}
+    a=1\\
+    b=2
+    \end{cases}\quad&
+     \end{flalign*}
+    \(\because\quad a=1>0\)，符合开口向上的条件\\
+    \(\therefore\quad a=1, b=2\)。
+    
+    \item[(2)]
+    当 \(b=2\) 时，不等式为 $ax^2-(a+2)x+2 \leq 0 \iff   (ax-2)(x-1) \leq 0$。\\
+    方程的根为 \(x=1\) 和 \(x=\dfrac{2}{a}\) (当 \(a \neq 0\) 时)。\\
+    分情况讨论 \(a\) 的取值：
+    \begin{itemize}
+        \item 若 \(a>2\)，则 \(\dfrac{2}{a} < 1\)。抛物线开口向上，解集为 \(\left[\dfrac{2}{a}, 1\right]\)。
+        \item 若 \(a=2\)，不等式为 \(2(x-1)^2 \leq 0\)，解为 \(x=1\)。
+        \item 若 \(0<a<2\)，则 \(\dfrac{2}{a} > 1\)。抛物线开口向上，解集为 \(\left[1, \dfrac{2}{a}\right]\)。
+        \item 若 \(a=0\)，不等式为 \(-2x+2 \leq 0\)，解得 \(x \geq 1\)。解集为 \([1, +\infty)\)。
+        \item 若 \(a<0\)，则 \(\dfrac{2}{a} < 0 < 1\)。抛物线开口向下，解集为 \(\left(-\infty, \dfrac{2}{a}\right] \cup [1, +\infty)\)。
+    \end{itemize}
+    
+    \item[(3)]    根据 (1) 的条件，\(a=1, b=2\)， \(\therefore\quad f(x)=x^2-3x+2\)。\\
+    不等式为 \(\dfrac{x^2-3x+2+1}{x-1} \geq 2k^2+k\)，即 \(\dfrac{x^2-3x+3}{x-1} \geq 2k^2+k\)。
+    
+    设 \(g(x) = \dfrac{x^2-3x+3}{x-1}\)。因为 \(x>1\)，令 \(t=x-1\)，则 \(t>0\)，且 \(x=t+1\)，则：\\
+    $
+    g(x) = \dfrac{(t+1)^2-3(t+1)+3}{t} = \dfrac{t^2+2t+1-3t-3+3}{t} = \dfrac{t^2-t+1}{t} = t+\dfrac{1}{t}-1
+    $
+    
+    根据基本不等式，当 \(t>0\) 时，\(t+\dfrac{1}{t} \geq 2\sqrt{t \cdot \dfrac{1}{t}} = 2\)，当且仅当 \(t=1\) 时取等号。
+    所以 \(g(x)\) 的最小值为 \(2-1=1\)。
+    
+    因为不等式对任意 \(x>1\) 恒成立，所以 \(2k^2+k\) 不能超过 \(g(x)\) 的最小值。
+    \[
+    2k^2+k \leq 1 \implies 2k^2+k-1 \leq 0 \implies (2k-1)(k+1) \leq 0
+    \]
+    解得 \(-1 \leq k \leq \dfrac{1}{2}\)。
+    
+    所以实数 \(k\) 的取值范围是 \(\left[-1, \dfrac{1}{2}\right]\)。
+\end{enumerate}
+\end{liti}
+
+
+\begin{liti}
+某学校要建造一个长方体形体育馆，其地面面积为 \(240\ \text{m}^2\)，体育馆高 \(5\ \text{m}\)。甲工程队报价为：馆顶每平方米造价100元，前后两侧墙壁平均造价每平方米150元，左右两侧墙壁平均造价每平方米250元，设体育馆前墙长为 \(x\) 米。
+    \begin{enumerate}
+        \item[(1)] 当 \(x \in (0,50)\) 时，体育馆前墙长度为多少时，甲工程队报价最低？
+        \item[(2)] 当 \(x \in (0,t]\)（\(0<t<50\)）时，现有乙工程队也参与该校体育馆建造竞标，其给出的整体报价为 \(12000+500\left(\dfrac{a+1152}{x}+a\right)\) 元（\(a>0\)）。若无论体育馆前墙长度 \(x\) 为多少米，乙工程队都能中标，试求 \(a\) 的取值范围。
+    \end{enumerate}
+\tcblower
+\textbf{解：}
+\begin{enumerate}
+    \item[(1)]
+    设体育馆前墙长为 \(x\) 米，则侧墙长为 \(y = \dfrac{240}{x}\) 米。
+    体育馆的建造成本 \(C_A(x)\) 包括馆顶、前后墙和左右墙的费用。
+    \begin{itemize}
+        \item 馆顶面积为 \(240\ \text{m}^2\)，造价为 \(240 \times 100 = 24000\) 元。
+        \item 前后两侧墙壁的总面积为 \(2 \times x \times 5 = 10x\ \text{m}^2\)，造价为 \(10x \times 150 = 1500x\) 元。
+        \item 左右两侧墙壁的总面积为 \(2 \times y \times 5 = 10y = 10 \times \dfrac{240}{x} = \dfrac{2400}{x}\ \text{m}^2\)，造价为 \(\dfrac{2400}{x} \times 250 = \dfrac{600000}{x}\) 元。
+    \end{itemize}
+    所以，甲工程队的总报价函数为：
+    \[ C_A(x) = 24000 + 1500x + \dfrac{600000}{x} \]
+    其中 \(x \in (0, 50)\)。
+    
+    为了求报价的最小值，我们对函数中与 \(x\) 相关的部分使用基本不等式：
+    \[ 1500x + \dfrac{600000}{x} \geq 2\sqrt{1500x \cdot \dfrac{600000}{x}} = 2\sqrt{9 \times 10^8} = 2 \times 30000 = 60000 \]
+    当且仅当 \(1500x = \dfrac{600000}{x}\) 时，等号成立。
+    解得 \(x^2 = \dfrac{600000}{1500} = 400\)，所以 \(x=20\)（因为 \(x>0\)）。
+    
+    由于 \(x=20\) 在定义域 \((0, 50)\) 内，所以当体育馆前墙长度为20米时，甲工程队报价最低。
+    
+    \item[(2)]
+    乙工程队的报价为 \(C_B(x) = 12000+500\left(\dfrac{a+1152}{x}+a\right)\)。
+    乙工程队能中标，意味着对于任意给定的 \(x\)，其报价 \(C_B(x)\) 总是低于或等于甲工程队的报价 \(C_A(x)\)。
+    \[ C_B(x) \leq C_A(x) \]
+    \[ 12000+500\left(\dfrac{a+1152}{x}+a\right) \leq 24000 + 1500x + \dfrac{600000}{x} \]
+    化简得：
+    \[ a-24 \leq 3x + \dfrac{48-a}{x} \]
+    这个不等式需要在 \(x \in (0, t]\) 上恒成立。
+    
+    设 \(h(x) = 3x + \dfrac{48-a}{x}\)。我们需要 \(a-24 \leq \min_{x \in (0, t]} h(x)\)。
+    
+    对 \(h(x)\) 的单调性进行讨论：
+    \begin{itemize}
+        \item 如果 \(48-a \leq 0\)，即 \(a \geq 48\)。\(h(x)\) 在 \((0, \infty)\) 上是增函数。最小值为 \(h(t) = 3t + \dfrac{48-a}{t}\)。
+        \(a-24 \leq 3t + \dfrac{48-a}{t} \implies a \leq \dfrac{3t^2+24t+48}{t+1}\)。
+        令 \(g(t) = \dfrac{3t^2+24t+48}{t+1}\)，其在 \((0,50)\) 上的最小值为36。
+        所以 \(a \leq 36\)。与 \(a \geq 48\) 矛盾，无解。
+        
+        \item 如果 \(0 < a < 48\)。\(h(x)\) 是对勾函数，在 \(x_0 = \sqrt{\dfrac{48-a}{3}}\) 处取得最小值。
+        \begin{itemize}
+            \item 若 \(x_0 \geq t\)，即 \(a \leq 48-3t^2\)。\(h(x)\) 在 \((0, t]\) 上单调递减，最小值为 \(h(t)\)。
+            得到 \(a \leq g(t)\)。
+            \item 若 \(x_0 < t\)，即 \(a > 48-3t^2\)。\(h(x)\) 在 \((0, t]\) 上的最小值为 \(h(x_0) = 2\sqrt{3(48-a)}\)。
+            不等式变为 \(a-24 \leq 2\sqrt{3(48-a)}\)。
+            若 \(a \leq 24\)，显然成立。
+            若 \(24 < a < 48\)，平方解得 \(a \leq 36\)。
+            所以此情况下要求 \(a \leq 36\)。
+        \end{itemize}
+    \end{itemize}
+    
+    “无论... \(x\) 为多少米”意味着不等式对所有 \(x \in (0, t]\) 成立。
+    “无论... \(t\) 为多少”意味着对所有 \(t \in (0, 50)\) 成立。
+    
+    综合所有情况，要使不等式对所有 \(t \in (0,50)\) 和 \(x \in (0,t]\) 恒成立，\(a\) 必须小于等于36。
+    因为 \(a>0\)，所以 \(a\) 的取值范围是 \((0, 36]\)。
+\end{enumerate}
+\end{liti}
+
+\begin{liti}
+问题：已知 \(a,b,c\) 均为正实数，且 \(\dfrac{1}{a}+\dfrac{1}{b}+\dfrac{1}{c}=1\)，求证：\(a+b+c \geq 9\)（当且仅当 \(a=b=c=3\) 时，等号成立）。\\
+    证明：\(a+b+c=(a+b+c)\left(\dfrac{1}{a}+\dfrac{1}{b}+\dfrac{1}{c}\right)=3+\left(\dfrac{b}{a}+\dfrac{a}{b}\right)+\left(\dfrac{c}{a}+\dfrac{a}{c}\right)+\left(\dfrac{c}{b}+\dfrac{b}{c}\right) \geq 3+2+2+2=9\)。\\
+    学习上述解法并解决下列问题：
+    \begin{enumerate}
+        \item[(1)] 已知 \(a,b,c\) 均为正实数，且 \(a+b+c=4\)，求 \(\dfrac{1}{a}+\dfrac{4}{b}+\dfrac{9}{c}\) 的最小值；
+        \item[(2)] 已知 \(a,b,x,y\) 均为正实数，且 \(\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}=1\)，求证：\(a^2+b^2 \geq (x+y)^2\)；
+        \item[(3)] 求 \(T=\sqrt{3-2t}+\sqrt{t-1}\) 的最大值，并求出使得 \(T\) 取得最大值时 \(t\) 的值。
+    \end{enumerate}
+\tcblower
+\textbf{解：}
+\begin{enumerate}
+    \item[(1)]
+    \begin{flalign*}
+    &\dfrac{1}{a}+\dfrac{4}{b}+\dfrac{9}{c}=\left(\dfrac{1}{a}+\dfrac{4}{b}+\dfrac{9}{c}\right)(a+b+c)\times\dfrac{1}{4}=\dfrac{1}{4}\times\left(1+\dfrac{4a}{b}+\dfrac{9a}{c}+\dfrac{b}{a}+4+\dfrac{9b}{c}+\dfrac{c}{a}+\dfrac{4c}{b}+9\right)&\\
+    &=\dfrac{1}{4}\times\left[14+\left(\dfrac{b}{a}+\dfrac{4a}{b}\right)+\left(\dfrac{c}{a}+\dfrac{9a}{c}\right)+\left(\dfrac{4c}{b}+\dfrac{9b}{c}\right)\right]\geq\dfrac{1}{4}\left(14+4+6+12\right)=9\\
+    &当且仅当\begin{cases}
+    	\qquad\dfrac{b}{a}=\dfrac{4a}{b}\\
+    	\qquad\dfrac{c}{a}=\dfrac{9a}{c}\\
+    	\qquad\dfrac{4c}{b}+\dfrac{9b}{c}\\
+    	\qquad a+b+c=4\\
+    	\qquad a>0,b>0,c>0
+    \end{cases}时取等，解得：\begin{cases}
+    a= \dfrac{2}{3}\\
+    b= \dfrac{4}{3}\\
+    c= 2
+    \end{cases}
+    \end{flalign*}
+       
+    $\therefore$最小值为9。
+
+    \item[(2)]
+    $ a^2+b^2 = (a^2+b^2)\left(\dfrac{x^2}{a^2}+\dfrac{y^2}{b^2}\right) =x^2+\dfrac{a^2y^2}{b^2}+\dfrac{b^2y^2}{a^2}+y^2 \geq x^2 +y^2+2\sqrt{\dfrac{a^2y^2}{b^2}\cdot\dfrac{b^2y^2}{a^2}}=x^2+y^2+2xy=\left(x+y\right)^2 $\\
+    当且仅当 \(\dfrac{a^2}{x^2/a^2} = \dfrac{b^2}{y^2/b^2}\iff \dfrac{a^2}{x} = \dfrac{b^2}{y}\) 时取等号。
+    证毕。
+
+    \item[(3)]
+    定义域为 \(1 \leq t \leq \dfrac{3}{2}\)。
+    
+  	令$x=\sqrt{3-2t},y=\sqrt{t-1},a=1,b=\dfrac{\sqrt{2}}{2}$ ：\\
+    则$\dfrac{\sqrt{3-2t}^2}{1^2}+\dfrac{\sqrt{t-1}^2}{\left(\dfrac{\sqrt{2}}{2}\right)^2}=3-2t+2t-2=1$，满足（2）的条件：\\
+    $\therefore\quad a^2+b^2\ge \left(x+y\right)^2\iff 1+\dfrac{1}{2}\geq \left(\sqrt{3-2t}+\sqrt{t-2}\right)^2$。\\
+    即：$T\leq\sqrt{\dfrac{3}{2}}=\dfrac{\sqrt{6}}{2}$，当且仅当：$\dfrac{1}{\sqrt{3-2t}}=\dfrac{\dfrac{1}{2}}{\sqrt{t-1}}\iff 2\sqrt{t-1}=\sqrt{3-2t}\iff 4t-4=3-2t\iff t=\dfrac{7}{6}$时取等。
+    
+    \(\therefore\quad T 的最大值为 \dfrac{\sqrt{6}}{2}\)，此时 \(t=\dfrac{7}{6}\)。
+\end{enumerate}
+\end{liti}
+
+\begin{liti}
+已知函数 \(f(x)=|3x^2-ax|+x^2-x+1\)（\(x>0\)），\(g(x)=\dfrac{f(x)}{x}\)。
+    \begin{enumerate}
+        \item[(1)] 若 \(a=1\)，求函数 \(f(x)\) 的值域；
+        \item[(2)] 若 \(a \leq 0\)，试判断 \(g(x)\) 的单调性并证明；
+        \item[(3)] 对 \(\forall t \in [3,4]\)，\(\exists x_1,x_2 \in [\dfrac{1}{8},2]\)（\(x_1 \neq x_2\)），使得 \(t=g(x_1)=g(x_2)\)，求实数 \(a\) 的取值范围。
+    \end{enumerate}
+\tcblower
+\textbf{解：}
+\begin{enumerate}
+    \item[(1)] 当 \(a=1\) 时，\(f(x) = |3x^2-x| + x^2-x+1\)。函数有两个0点：$0,\dfrac{1}{3}$。又因为$x>0$:
+    \begin{itemize}
+        \item 当 \(0 < x \leq \frac{1}{3}\) 时，\(f(x) = -(3x^2-x) + x^2-x+1 = -2x^2+1\)。
+        在 \((0, \frac{1}{3}]\) 上单调递减，值域为 \([\frac{7}{9}, 1)\)。
+        \item 当 \(x > \frac{1}{3}\) 时，\(f(x) = (3x^2-x) + x^2-x+1 = 4x^2-2x+1\)。
+        在 \((\frac{1}{3}, \infty)\) 上单调递增，值域为 \((\frac{7}{9}, +\infty)\)。
+    \end{itemize}
+    所以，函数 \(f(x)\) 的值域是 \(\left[\frac{7}{9}, +\infty\right)\)。
+
+    \item[(2)] 当 \(a \leq 0\) 时，$3x^2-ax \geq 0$，所以 \(|3x^2-ax| = 3x^2-ax\)。\\
+    \(\therefore\quad f(x) = 4x^2-(a+1)x+1\)。\\
+    \(\therefore\quad g(x) = \frac{f(x)}{x} = 4x - (a+1) + \frac{1}{x}=4x + \frac{1}{x} - (a+1)\)。这是对勾函数，当$x>0$时，有最小值$g(x)\geq 2\sqrt{4x\cdot\dfrac{1}{x}-(a+1)}$；当且仅当$x=\dfrac{1}{2}$时取等。
+    
+    
+    当 \(0 < x < \frac{1}{2}\) 时，单调递减。
+    当 \(x > \frac{1}{2}\) 时，单调递增。
+
+    \item[(3)]
+    条件等价于 \([3,4] \subseteq g\left(\left[\frac{1}{8}, 2\right]\right)\) 且函数在 \([\frac{1}{8}, 2]\) 上的最小值点不是区间的端点。
+    \(g(x) = |3x-a| + x-1+\frac{1}{x}\)。
+    
+    \textbf{超纲}
+\end{enumerate}
+\end{liti}
+\end{document}
