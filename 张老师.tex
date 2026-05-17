@@ -1,0 +1,321 @@
+%\documentclass[10pt,a4paper]{ctexart}
+%
+\documentclass[CJKmath,a4paper,10pt]{ctexart}
+%\usepackage{geometry}
+%\geometry{inner=1.5cm,outer=1.5cm,top=2.45cm,bottom=1cm}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+\usepackage{amsmath,amssymb,geometry,framed,xcolor}
+
+\RequirePackage{unicode-math} % Math fonts in xetexorluatex
+%\setmathfont{texgyrepagella-math.otf}
+%\setmainfont{STIXTwoText}[
+%	Path=./fonts/STIXTwoText/,
+%  Extension = .otf,
+%  UprightFont = STIXTwoMath-Regular,
+%  BoldFont = STIXTwoText-SemiBold,
+%  ItalicFont = STIXTwoText-Italic,
+%  BoldItalicFont = STIXTwoText-BoldItalic,
+%]
+%\setmathfont{STIXTwoMath-Regular.otf}
+
+\usepackage{tikz,calc}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark,patterns,decorations.pathmorphing,arrows.meta}
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins,theorems}
+
+
+\usepackage{xkeyval}
+\makeatletter 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xkeyval} 
+
+\tcbset{
+	common/.style={
+		fontupper=\rmfamily,
+		lower separated=true,
+		coltitle=black,
+		colback=gray!5,
+		boxrule=0.5pt,
+		fonttitle=\bfseries,
+		enhanced,
+		breakable,
+		top=8pt,
+		before skip=8pt,
+		attach boxed title to top left={yshift=-0.05in,xshift=0.15in},
+		boxed title style={
+			boxrule=0pt,
+			colframe=black,
+			arc=0pt,
+			outer arc=0pt,
+			drop fuzzy shadow
+		},
+		separator sign={.},
+		drop fuzzy shadow
+	},
+	litistyle/.style={  %例题风格
+		common,
+		colframe=gray,% 
+		colback=white,
+		colbacktitle=Gold,
+		sharp corners,rounded corners=southeast,
+		overlay unbroken and last={
+			\node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
+	},
+	% -----------------------------------------------------------------------------
+	% Explanation: BreakableBox@title key
+	% The following defines a pgfkeys/tcolorbox key named
+	%   "BreakableBox@title" which accepts 2 arguments (see 
+	%   "/.code n args={2}"). When the key is used like
+	%   "BreakableBox@title={<env>}{<optTitle>}" the code below is executed
+	%   with #1=<env> and #2=<optTitle>.
+	%
+	% Purpose:
+	% - If the second argument (#2) is empty, set the tcolorbox title to
+	%     \csname <env>name\endcsname~\thetcbcounter
+	%   which expands to the environment name (e.g. "liti" -> \litiname)
+	%   followed by the current counter value.
+	% - If the second argument is provided, append " (#2)" to the title.
+	%
+	% Notes:
+	% - This relies on \makeatletter being active so that keys with '@'
+	%   are allowed in control sequence names.
+	% - \ifblank is used to test whether #2 is empty; ensure the package
+	%   that provides \ifblank (for example, etoolbox or xparse) is loaded
+	%   earlier if necessary.
+	% - Example usage inside the code: \tcbset{title={...}} sets the
+	%   tcolorbox title key accordingly.
+	%
+	BreakableBox@title/.code n args={2}
+	{
+		\ifblank{#2}
+		{\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+		{\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+	},
+}      
+% define an internal control sequence \newbreakablebox for fancy mode's newtheorem
+% #1 is the environment name, #2 is the prefix of label, #3 is the style
+% style: thmstyle, defstyle, prostyle
+% e.g. \newbreakablebox{theorem}{thm}{thmstyle}
+% will define two environments: numbered ``theorem'' and no-numbered ``theorem*''
+% WARNING FOR MULTILINGUAL: this cs will automatically find \theoremname's definition,
+% WARNING FOR MULTILINGUAL: it should be defined in language settings.
+\newcommand{\newbreakablebox}[3]{
+	\ifcsundef{#1name}{%
+		% define a default name if not defined before
+		\tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+	}{\relax}
+	\DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+		common, % use common style
+		#3, % use the style passed in
+		IfValueTF={##1}
+		{BreakableBox@title={#1}{##1}}
+		{
+			IfValueTF={##2}
+			{BreakableBox@title={#1}{##2}}
+			{BreakableBox@title={#1}{}}
+		},
+		IfValueT={##4}
+		{
+			IfBooleanTF={##3}
+			{label={##4}}
+			{VIVID@label={#2}{##4}}
+		}
+	}
+	\DeclareTColorBox{#1*}{ g o }{
+		common,#3,
+		IfValueTF={##1}
+		{BreakableBox@title={#1}{##1}}
+		{
+			IfValueTF={##2}
+			{BreakableBox@title={#1}{##2}}
+			{BreakableBox@title={#1}{}}
+		},
+	}
+}
+% define several environment 
+% we define headers like \definitionname before
+\newcommand{\litiname}{例题}
+\newbreakablebox{liti}{def}{litistyle}
+
+
+%补充内容
+%%设置新字体
+%%定义带圈数字命令
+\newfontfamily{\nmfont}{circlenumber}
+[%
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}%\kk{<参数范围1-95>}96、97、98、99分别用\quan{196} \quan{197} \quan{199} \quan{201}
+
+%脚注使用带圈数字
+\newcommand*\kkctr[1]{%
+	\protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+%%无悬挂脚注格式
+\renewcommand\@makefntext[1]{%
+	\setlength\parindent{2\ccwd}\selectfont
+	\@thefnmark\ #1}
+
+%修改\part，使其不分页
+\def\@endpart{%
+	\thispagestyle{empty}
+	\vskip40\p@%
+	\@afterheading}
+
+
+
+\RequirePackage{enumitem}
+%\newenvironment{myenum}{\begin{enumerate}[label=\protect\kk{\arabic*}]\small}{\end{enumerate}}%
+\setlist{noitemsep}
+\setlist[enumerate, 1]{label=\protect\kk{\arabic*},itemsep=0.5ex}  
+\makeatother
+
+
+
+%%%marker环境
+\newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
+	after skip=3mm,fontupper=\rmfamily,
+	boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+	colback=yellow!50,colframe=yellow!20!black,
+	sharp corners,rounded corners=southeast,
+	arc is angular,arc=3mm,underlay={%
+		\path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+	},
+	drop fuzzy shadow,#1
+}
+
+
+\usepackage{graphicx}
+\usepackage{float}
+\geometry{
+	a4paper,
+	left=1.5cm,
+	right=5cm, % 右侧留出批注空间
+	top=2cm,
+	bottom=2cm,
+	marginparwidth=3.5cm, % 批注栏宽度
+	marginparsep=0.5cm    % 正文与批注栏间距
+}
+
+% 定义重点高亮和公式框样式
+\definecolor{myred}{RGB}{200,0,0}
+\definecolor{noteblue}{RGB}{0,100,200}
+\newcommand{\keyformula}[1]{%
+	\begin{center}
+		\begin{framed}
+			\colorbox{blue!10}{$\displaystyle #1$}
+		\end{framed}
+	\end{center}
+}
+\newcommand{\note}[1]{\par\smallskip\noindent\textbf{\color{noteblue}注：} #1\par\smallskip}
+\newcommand{\mynote}[1]{\marginpar{\footnotesize\color{gray}\textit{#1}}} % 侧边批注命令
+
+\begin{document}
+	
+	\noindent
+	\textbf{\Large 三角形面积与周长的二级结论笔记}
+	\vspace{0.5em}
+	\hrule
+	\vspace{0.5em}
+	
+	\section{核心引理}
+	在$\triangle ABC$中，已知角$A$的对边为$a$，则：
+	\mynote{考试可直接用，等腰时取等号}
+	
+	\keyformula{
+		S_{\Delta \max} = \dfrac{a^2}{4 \tan\dfrac{A}{2}}, \quad
+		C_{\text{周max}} = a\left(1 + \frac{1}{\sin\dfrac{A}{2}}\right)
+	}
+	
+	\subsection*{证明}
+	1.  \textbf{面积最大值证明}\\
+	由余弦定理：
+	$
+	a^2 = b^2 + c^2 - 2bc\cos A \ge 2bc(1 - \cos A)\Longrightarrow
+	bc \le \dfrac{a^2}{2(1 - \cos A)}
+	$
+	
+	三角形面积公式 $S_\Delta = \dfrac{1}{2}bc\sin A
+	\le \dfrac{a^2\sin A}{4(1 - \cos A)}
+	= \dfrac{a^2 \cdot 2\sin\dfrac{A}{2}\cos\dfrac{A}{2}}{4 \cdot 2\sin^2\dfrac{A}{2}}
+	= \dfrac{a^2}{4\tan\dfrac{A}{2}}
+	$
+	
+	当且仅当 $b = c$（即$\triangle ABC$为等腰三角形）时取等号。
+	\mynote{关键：二倍角公式化简}
+	
+	\vspace{0.5em}
+	2.  \textbf{周长最大值证明}\\
+	由余弦定理变形：
+	\[
+	a^2 = (b + c)^2 - 2bc(1 + \cos A)
+	\]
+	结合均值不等式 $bc \le \left(\dfrac{b+c}{2}\right)^2$，得：
+	\[
+	a^2 \ge (b + c)^2 - \frac{(b + c)^2}{2}(1 + \cos A)
+	= (b + c)^2 \cdot \sin^2\frac{A}{2}
+	\]
+	开方并整理周长 $C_{\text{周}} = a + b + c$：
+	\[
+	C_{\text{周}} \le a + \dfrac{a}{\sin\dfrac{A}{2}}
+	= a\left(1 + \frac{1}{\sin\dfrac{A}{2}}\right)
+	\]
+	当且仅当 $b = c$（即$\triangle ABC$为等腰三角形）时取等号。
+	
+	\note{本引理也可通过正弦定理证明，取等条件均为$b=c$（等腰三角形），考试中可直接使用结论“秒杀”。}
+	
+	\hrule
+	\vspace{0.5em}
+	
+	\section{例题应用}
+\begin{liti}
+	\textbf{题：}在$\triangle ABC$中，内角$A,B,C$的对边分别为$a,b,c$，且满足
+	\[
+	\dfrac{\sin B}{\sin A + \sin C} = \dfrac{a - c}{b + c}
+	\]
+	(1) 求角$A$；
+	(2) 若$a = 2$，求$\triangle ABC$周长的取值范围。
+	
+	\tcblower \textbf{解答}
+	1.  \textbf{求角$A$}\\
+	由正弦定理，将角化边：
+	\[
+	\frac{b}{a + c} = \frac{a - c}{b + c}
+	\]
+	交叉相乘整理：
+	\[
+	b(b + c) = (a - c)(a + c) \implies b^2 + bc = a^2 - c^2
+	\]
+	即 $a^2 = b^2 + c^2 + bc$。
+	对比余弦定理 $a^2 = b^2 + c^2 - 2bc\cos A$，得：
+	\[
+	\cos A = -\frac{1}{2}
+	\]
+	又 $0 < A < \pi$，故 $A = \dfrac{2\pi}{3}$。
+	\note{余弦定理逆用，求特殊角}
+	
+	2.  \textbf{求周长取值范围}\\
+	由引理，当$a=2$、$A=\dfrac{2\pi}{3}$时，周长最大值：
+	\[
+	C_{\text{周max}} = 2\left(1 + \dfrac{1}{\sin\dfrac{\pi}{3}}\right)
+	= 2\left(1 + \dfrac{2}{\sqrt{3}}\right)
+	= 2 + \dfrac{4\sqrt{3}}{3}
+	\]
+	再由三角形两边之和大于第三边：$b + c > a = 2$，故周长 $C_{\text{周}} = a + b + c > 4$。
+	
+	\[
+		\text{周长取值范围：}\ 4 < C_{\text{周}} \le 2 + \frac{4\sqrt{3}}{3}
+	\]
+\end{liti}
+	\note{周长下限由三角形三边关系直接得到，上限由引理结论快速求得，无需重复推导。}
+	\mynote{下限易错，别忘三边关系！}
+\end{document}

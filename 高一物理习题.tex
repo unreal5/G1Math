@@ -1,0 +1,179 @@
+\documentclass[CJKmath,a4paper,10pt]{ctexart}
+\usepackage{geometry}
+\geometry{inner=1cm,outer=1.5cm,top=2.45cm,bottom=1cm}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+\usepackage{g1math-note}
+\begin{document}
+	\section{物理习题}
+\begin{liti}	
+ 如图甲所示，固定粗糙斜面的倾角为$37^\circ$，与斜面平行的轻弹簧下端固定在$C$处，上端连接质量为$1\mathrm{kg}$的小滑块（视为质点），$BC$为弹簧的原长。现将滑块从$A$处由静止释放，在滑块从释放至第一次到达最低点的过程中，其加速度$a$随弹簧的形变量$x$的变化规律如图乙所示（取沿斜面向下为加速度的正方向），取$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$g=10\mathrm{m/s^2}$。根据上述过程，试求出下列各量：
+ \begin{enumerate}
+	\item 滑块与斜面间的动摩擦因数$\mu$；
+	\item 当$x=0$时滑块的动能$E_\text{k}$；
+	\item 弹簧的最大弹性势能$E_\text{p}$。
+\end{enumerate}
+
+
+% 题目配图（图甲：斜面+弹簧+滑块）
+\begin{figure}[H]
+\centering
+{\everymath{\displaystyle}
+\begin{tikzpicture}[>=Stealth,scale=1,every node/.style={font=\small}]
+	% 斜面与地面
+	\begin{scope}[xshift=-5cm]
+	\coordinate (O) at (0,0);
+	\coordinate (D) at (4,0);
+	\coordinate (S) at (4,3);
+	\draw[thick,black!80] (O) -- (D);
+	\draw[thick,black!80] (O) -- (S);
+
+	% 倾角标注
+	\draw[black!70] (1.2,0) arc[start angle=0,end angle=37,radius=1.2];
+	\node at (1.55,0.45) {$37^\circ$};
+
+	% 斜面上的关键点
+	\coordinate (C) at (0,0);
+	\coordinate (B) at (3,2.25);
+	\coordinate (A) at (4,3);
+
+	% 弹簧与滑块
+	\draw[thick,decorate,decoration={coil,segment length=4pt,amplitude=2.4pt},draw=GOneAccent!80!black] ($(C)+(0,0.2)$) -- ($(A)+(0,0.2)$);
+	\begin{scope}[shift={(A)},rotate=37]
+		\draw[fill=white,draw=black!80] (-0.28,0) rectangle (0.28,0.42);
+	\end{scope}
+
+	% 点与文字标注
+	\fill[GOneAccent!85!black] (A) circle (1.2pt);
+	\fill[GOneAccent!85!black] (B) circle (1.2pt);
+	\fill[GOneAccent!85!black] (C) circle (1.2pt);
+	\node[above left,rotate=37] at ($(A)+(0.2,0.1)$) {$A$};
+	\node[above,rotate=37] at ($(B)+(-0.1,0.3)$) {$B$};
+	\node[below left] at (C) {$C$};
+	\node[right] at ($(A)+(0.35,0.1)$) {滑块};
+
+	% BC 为原长
+	\draw[|<->|,black!70] ($(B)+(-0.32,0.43)$) -- ($(C)+(-0.32,0.43)$)
+		node[midway,sloped,above] {$BC$为原长};
+\end{scope}
+	\begin{scope}[x=10cm,y=1cm,scale=0.5,xshift=10cm,yshift=2cm]
+	% 图乙：a-x图像
+	
+	%\begin{tikzpicture}
+		\coordinate (A) at (0.2,4);
+		\coordinate (B) at (0,2);
+		\coordinate (C) at (0.2,0);
+		\coordinate (D) at (0.6,-4);
+		\coordinate (E) at(0,4);
+		\coordinate (F) at(0,2);
+		% 坐标轴
+		\draw[->,black!80] (0,-4.5) -- (0,4.5) node[above] {$a\ (\mathrm{m\cdot s^{-2}})$};
+		\draw[->,black!80] (-0.1,0) -- (0.7,0) node[right] {$x\ (\mathrm{m})$};
+		% 刻度
+		\foreach \y in {-4,-3,-2,-1,1,2,3,4} {
+			\draw[black!65] (0.02,\y) -- (-0.02,\y) node[left] {$\y$};
+		}
+		\foreach \x in {0.2,0.4,0.6} {
+			\draw[black!65] (\x,0.05) -- (\x,-0.05) node[below] {$\x$};
+		}
+		\draw[very thick,GOneAccent!85!black] (A)--(B)--(C)--(D);
+		\draw[densely dotted,GOneAccent!70!black] (A) -- (E);
+		\node[right,text=GOneAccent!85!black] at (A) {A};
+		\node[right] at(F){B};
+		\node[above]at(0.2,0){Q};
+		\node[below left]at(0,0){O};
+\end{scope}		
+\end{tikzpicture}
+
+	\caption{\emph{图甲为斜面弹簧装置，图乙为加速度 $a$ 随形变量 $x$ 的变化规律}}
+}
+\end{figure}
+\tcblower
+\begin{enumerate}
+	\item \textbf{求滑块与斜面间的动摩擦因数$\mu$}\\
+	当$x=0$时，弹簧处于原长，弹力为$0$。对滑块沿斜面方向应用牛顿第二定律：
+	\[
+	mg\sin37^\circ-\mu mg\cos37^\circ=ma_0.
+	\]
+	代入$m=1\mathrm{kg}$，$g=10\mathrm{m/s^2}$，$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$a_0=2\mathrm{m/s^2}$，得
+	\[
+	1\times10\times0.6-\mu\times1\times10\times0.8=1\times2,
+	\qquad \mu=0.5.
+	\]
+
+
+\item \textbf{当$x=0$时滑块的动能$E_\text{k}$}
+
+根据\textbf{动能定理}，合外力做功等于动能变化：$W_\text{合}=\Delta E_\text{k}$。
+合外力$F_\text{合}=ma$，在$a-x$图像中，合外力做功等于$m$乘以$a-x$图线与$x$轴围成的面积（高中面积法）。
+
+从$A$（$x=0.2\mathrm{m}$）到$B$（$x=0$），$a-x$图为梯形：
+上底$a_1=2\mathrm{m/s^2}$，下底$a_2=4\mathrm{m/s^2}$，高$\Delta x=0.2\mathrm{m}$。
+\[
+S = \frac{(a_1+a_2)}{2} \cdot \Delta x = \frac{(2+4)}{2} \times 0.2 = 0.6\ \mathrm{m\cdot s^{-2}}
+\]
+合外力做功：
+\[
+W_\text{合}=mS=1\times0.6=0.6\mathrm{J}.
+\]
+因滑块从静止释放，初动能为$0$，故$E_\text{k} = W_\text{合} = 0.6\mathrm{J}$。
+
+\item \textbf{求弹簧的最大弹性势能$E_\text{p}$}
+
+当滑块第一次到达最低点时，速度为$0$，弹簧形变量最大，设为$x_m$。
+由图乙中$x>0$部分知，滑块压缩弹簧时的加速度满足
+\[
+a=2-10x.
+\]
+\textbf{思路：} 全过程中初、末速度都为$0$，故总动能变化量为$0$。由第二问可知，物体运动到$x=0$时的动能为$0.6\mathrm{J}$，因此从$x=0$到第一次到达最低点这一段，$a-x$图像对应的有向面积应为$-0.6$。
+	
+从$x=0$到第一次到达最低点，由动能定理可得合外力做功等于动能变化。
+在$a-x$图像中，这对应于图线与$x$轴围成的有向面积乘以质量。
+
+其中，$x=0$到$x=0.2$之间图线在$x$轴上方，围成一个三角形，面积为
+\[
+S_1=\frac12\times 0.2\times 2=0.2.
+\]
+
+$x=0.2$到$x=x_m$之间图线在$x$轴下方，围成一个三角形，面积为
+\[
+S_2=\frac12\times (x_m-0.2)\times (10x_m-2).
+\]
+
+因为此过程末动能为$0$，初动能为$E_\text{k}=0.6\mathrm{J}$，所以合外力做功为
+\[
+W_\text{合}=0-E_\text{k}=-0.6\mathrm{J}.
+\]
+
+又$m=1\mathrm{kg}$，故有
+\[
+S_1-S_2=-0.6.
+\]
+
+即
+\[
+0.2-\frac12(x_m-0.2)(10x_m-2)=-0.6.
+\]
+
+化简得
+\[
+5x_m^2-2x_m-0.6=0.
+\]
+
+整理得
+\[
+x_m=0.6\mathrm{m}.
+\]
+（负值舍去）。
+
+故弹簧的最大弹性势能为
+\[
+E_\text{p}=\frac12 kx_m^2=\frac12\times10\times(0.6)^2=1.8\mathrm{J}.
+\]
+\end{enumerate}
+\noindent
+\textbf{最终答案：}
+\begin{marker}
+(1) $\boxed{\mu=0.5}$；(2) $\boxed{E_\text{k}=0.6\mathrm{J}}$；(3) $\boxed{E_\text{p}=1.8\mathrm{J}}$
+\end{marker}
+\end{liti}
+\end{document}

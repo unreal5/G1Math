@@ -1,0 +1,364 @@
+\documentclass[CJKmath,a4paper,10pt]{ctexart}
+\usepackage{geometry}
+\geometry{inner=1cm,outer=1.5cm,top=2.45cm,bottom=1cm}
+\usepackage[dvipsnames,svgnames,x11names,table]{xcolor}
+
+
+\RequirePackage{amssymb} % Must be loaded before unicode-math
+\RequirePackage{unicode-math} % Math fonts in xetexorluatex
+%\setmathfont{texgyrepagella-math.otf}
+%\setmainfont{STIXTwoText}[
+%	Path=./fonts/STIXTwoText/,
+%  Extension = .otf,
+%  UprightFont = STIXTwoMath-Regular,
+%  BoldFont = STIXTwoText-SemiBold,
+%  ItalicFont = STIXTwoText-Italic,
+%  BoldItalicFont = STIXTwoText-BoldItalic,
+%]
+%\setmathfont{STIXTwoMath-Regular.otf}
+
+\usepackage{tikz,calc}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark,patterns,decorations.pathmorphing,arrows.meta}
+% By default all math in TikZ nodes are set in inline mode. Change this to
+% displaystyle so that we don't get small fractions.
+\everymath{\displaystyle}
+
+\usepackage[most]{tcolorbox}
+\tcbuselibrary{breakable, skins,theorems}
+
+
+\usepackage{xkeyval}
+\makeatletter 
+\usepackage{amsmath,amssymb,amsthm}
+\usepackage{xkeyval}
+\tcbset{
+	common/.style={
+		fontupper=\rmfamily,
+		lower separated=true,
+		coltitle=black,
+		colback=gray!5,
+		boxrule=0.5pt,
+		fonttitle=\bfseries,
+		enhanced,
+		breakable,
+		top=8pt,
+		before skip=8pt,
+		attach boxed title to top left={yshift=-0.05in,xshift=0.15in},
+		boxed title style={
+			boxrule=0pt,
+			colframe=black,
+			arc=0pt,
+			outer arc=0pt,
+			drop fuzzy shadow
+		},
+		separator sign={.},
+		drop fuzzy shadow
+	},
+	litistyle/.style={  %例题风格
+		common,
+		colframe=gray,% 
+		colback=white,
+		colbacktitle=Gold,
+		sharp corners,rounded corners=southeast,
+		overlay unbroken and last={
+			\node[anchor=south east, outer sep=0pt] at (\linewidth-width,0){\textcolor{black!60}{$\blacksquare$}};}
+	},
+	% -----------------------------------------------------------------------------
+	% Explanation: BreakableBox@title key
+	% The following defines a pgfkeys/tcolorbox key named
+	%   "BreakableBox@title" which accepts 2 arguments (see 
+	%   "/.code n args={2}"). When the key is used like
+	%   "BreakableBox@title={<env>}{<optTitle>}" the code below is executed
+	%   with #1=<env> and #2=<optTitle>.
+	%
+	% Purpose:
+	% - If the second argument (#2) is empty, set the tcolorbox title to
+	%     \csname <env>name\endcsname~\thetcbcounter
+	%   which expands to the environment name (e.g. "liti" -> \litiname)
+	%   followed by the current counter value.
+	% - If the second argument is provided, append " (#2)" to the title.
+	%
+	% Notes:
+	% - This relies on \makeatletter being active so that keys with '@'
+	%   are allowed in control sequence names.
+	% - \ifblank is used to test whether #2 is empty; ensure the package
+	%   that provides \ifblank (for example, etoolbox or xparse) is loaded
+	%   earlier if necessary.
+	% - Example usage inside the code: \tcbset{title={...}} sets the
+	%   tcolorbox title key accordingly.
+	%
+	BreakableBox@title/.code n args={2}
+	{
+		\ifblank{#2}
+		{\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+		{\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+	},
+}      
+% define an internal control sequence \newbreakablebox for fancy mode's newtheorem
+% #1 is the environment name, #2 is the prefix of label, #3 is the style
+% style: thmstyle, defstyle, prostyle
+% e.g. \newbreakablebox{theorem}{thm}{thmstyle}
+% will define two environments: numbered ``theorem'' and no-numbered ``theorem*''
+% WARNING FOR MULTILINGUAL: this cs will automatically find \theoremname's definition,
+% WARNING FOR MULTILINGUAL: it should be defined in language settings.
+\newcommand{\newbreakablebox}[3]{
+	\ifcsundef{#1name}{%
+		% define a default name if not defined before
+		\tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+	}{\relax}
+	\DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+		common, % use common style
+		#3, % use the style passed in
+		IfValueTF={##1}
+		{BreakableBox@title={#1}{##1}}
+		{
+			IfValueTF={##2}
+			{BreakableBox@title={#1}{##2}}
+			{BreakableBox@title={#1}{}}
+		},
+		IfValueT={##4}
+		{
+			IfBooleanTF={##3}
+			{label={##4}}
+			{VIVID@label={#2}{##4}}
+		}
+	}
+	\DeclareTColorBox{#1*}{ g o }{
+		common,#3,
+		IfValueTF={##1}
+		{BreakableBox@title={#1}{##1}}
+		{
+			IfValueTF={##2}
+			{BreakableBox@title={#1}{##2}}
+			{BreakableBox@title={#1}{}}
+		},
+	}
+}
+% define several environment 
+% we define headers like \definitionname before
+\newcommand{\litiname}{例题}
+\newbreakablebox{liti}{def}{litistyle}
+
+
+%补充内容
+%%设置新字体
+%%定义带圈数字命令
+\newfontfamily{\nmfont}{circlenumber}
+[%
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}%\kk{<参数范围1-95>}96、97、98、99分别用\quan{196} \quan{197} \quan{199} \quan{201}
+
+%脚注使用带圈数字
+\newcommand*\kkctr[1]{%
+	\protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+%%无悬挂脚注格式
+\renewcommand\@makefntext[1]{%
+	\setlength\parindent{2\ccwd}\selectfont
+	\@thefnmark\ #1}
+
+%修改\part，使其不分页
+\def\@endpart{%
+	\thispagestyle{empty}
+	\vskip40\p@%
+	\@afterheading}
+
+
+
+\RequirePackage{enumitem}
+%\newenvironment{myenum}{\begin{enumerate}[label=\protect\kk{\arabic*}]\small}{\end{enumerate}}%
+\setlist{noitemsep}
+\setlist[enumerate, 1]{label=\protect\kk{\arabic*},itemsep=0.5ex}  
+\makeatother
+
+
+
+%%%marker环境
+\newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
+	after skip=3mm,fontupper=\rmfamily,
+	boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+	colback=yellow!50,colframe=yellow!20!black,
+	sharp corners,rounded corners=southeast,
+	arc is angular,arc=3mm,underlay={%
+		\path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[fill=yellow!50!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+	},
+	drop fuzzy shadow,#1
+}
+
+
+\usepackage{graphicx}
+\usepackage{float}
+\begin{document}
+	\section{物理习题}
+\begin{liti}	
+ 如图甲所示，固定粗糙斜面的倾角为$37^\circ$，与斜面平行的轻弹簧下端固定在$C$处，上端连接质量为$1\mathrm{kg}$的小滑块（视为质点），$BC$为弹簧的原长。现将滑块从$A$处由静止释放，在滑块从释放至第一次到达最低点的过程中，其加速度$a$随弹簧的形变量$x$的变化规律如图乙所示（取沿斜面向下为加速度的正方向），取$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$g=10\mathrm{m/s^2}$。根据上述过程，试求出下列各量：
+ \begin{enumerate}
+	\item 滑块与斜面间的动摩擦因数$\mu$；
+	\item 当$x=0$时滑块的动能$E_\text{k}$；
+	\item 弹簧的最大弹性势能$E_\text{p}$。
+\end{enumerate}
+
+
+% 题目配图（图甲：斜面+弹簧+滑块）
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Stealth,scale=1]
+	% 斜面与地面
+	\begin{scope}[xshift=-5cm]
+	\coordinate (O) at (0,0);
+	\coordinate (D) at (4,0);
+	\coordinate (S) at (4,3);
+	\draw[thick] (O) -- (D);
+	\draw[thick] (O) -- (S);
+
+	% 倾角标注
+	\draw (1.2,0) arc[start angle=0,end angle=37,radius=1.2];
+	\node at (1.55,0.45) {$37^\circ$};
+
+	% 斜面上的关键点
+	\coordinate (C) at (0,0);
+	\coordinate (B) at (3,2.25);
+	\coordinate (A) at (4,3);
+
+	% 弹簧与滑块
+	\draw[decorate,decoration={coil,segment length=4pt,amplitude=2.4pt}] ($(C)+(0,0.2)$) -- ($(A)+(0,0.2)$);
+	\begin{scope}[shift={(A)},rotate=37]
+		\draw[fill=white] (-0.28,0) rectangle (0.28,0.42);
+	\end{scope}
+
+	% 点与文字标注
+	\fill (A) circle (1.2pt);
+	\fill (B) circle (1.2pt);
+	\fill (C) circle (1.2pt);
+	\node[above left,rotate=37] at ($(A)+(0.2,0.1)$) {$A$};
+	\node[above,rotate=37] at ($(B)+(-0.1,0.3)$) {$B$};
+	\node[below left] at (C) {$C$};
+	\node[right] at ($(A)+(0.35,0.1)$) {滑块};
+
+	% BC 为原长
+	\draw[|<->|] ($(B)+(-0.32,0.43)$) -- ($(C)+(-0.32,0.43)$)
+		node[midway,sloped,above] {$BC$为原长};
+
+	\node at (2.4,-1.5) {图甲-斜面装置};
+\end{scope}
+	\begin{scope}[x=10cm,y=1cm,scale=0.5,xshift=10cm,yshift=2cm]
+	% 图乙：a-x图像
+	
+	%\begin{tikzpicture}
+		\coordinate (A) at (0.2,4);
+		\coordinate (B) at (0,2);
+		\coordinate (C) at (0.2,0);
+		\coordinate (D) at (0.6,-4);
+		\coordinate (E) at(0,4);
+		\coordinate (F) at(0,2);
+		% 坐标轴
+		\draw[->] (0,-4.5) -- (0,4.5) node[above] {$a\ (\mathrm{m\cdot s^{-2}})$};
+		\draw[->] (-0.1,0) -- (0.7,0) node[right] {$x\ (\mathrm{m})$};
+		% 刻度
+		\foreach \y in {-4,-3,-2,-1,1,2,3,4} {
+			\draw (0.02,\y) -- (-0.02,\y) node[left] {$\y$};
+		}
+		\foreach \x in {0.2,0.4,0.6} {
+			\draw (\x,0.05) -- (\x,-0.05) node[below] {$\x$};
+		}
+		\draw(A)--(B)--(C)--(D);
+		\draw[dotted,red] (A) node[right]{A}--(E);
+		\node[right] at(F){B};
+		\node[above]at(0.2,0){Q};
+		\node[below left]at(0,0){O};
+		\node at (0.3,-5) {图乙-$a-x$变化规律};
+\end{scope}		
+\end{tikzpicture}
+	\caption{\emph{图甲：斜面装置；图乙：$a-x$变化规律}}
+\end{figure}
+\tcblower
+\begin{enumerate}
+	\item \textbf{求滑块与斜面间的动摩擦因数$\mu$}\\
+	当$x=0$时，弹簧处于原长，弹力为$0$。对滑块沿斜面方向由牛顿第二定律：$mg\sin37^\circ - \mu mg\cos37^\circ = ma_0$
+代入$m=1\mathrm{kg}$，$g=10\mathrm{m/s^2}$，$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$a_0=2\mathrm{m/s^2}$：
+\[1\times10\times0.6 - \mu\times1\times10\times0.8 = 1\times2 \Rightarrow \mu = 0.5\]
+
+
+\item \textbf{当$x=0$时滑块的动能$E_\text{k}$}
+
+根据\textbf{动能定理}，合外力做功等于动能变化：$W_\text{合} = \Delta E_\text{k}$。
+合外力$F_\text{合}=ma$，在$a-x$图像中，合外力做功等于$m$乘以$a-x$图线与$x$轴围成的面积（高中面积法）。
+
+从$A$（$x=0.2\mathrm{m}$）到$B$（$x=0$），$a-x$图为梯形：
+上底$a_1=2\mathrm{m/s^2}$，下底$a_2=4\mathrm{m/s^2}$，高$\Delta x=0.2\mathrm{m}$
+\[
+S = \frac{(a_1+a_2)}{2} \cdot \Delta x = \frac{(2+4)}{2} \times 0.2 = 0.6\ \mathrm{m\cdot s^{-2}}
+\]
+合外力做功：
+$
+W_\text{合} = mS = 1\times0.6 = 0.6\ \mathrm{J}
+$
+因滑块从静止释放，初动能为$0$，故$E_\text{k} = W_\text{合} = 0.6\mathrm{J}$。
+
+\item \textbf{求弹簧的最大弹性势能$E_\text{p}$}
+
+当滑块第一次到达最低点时，速度为$0$，弹簧形变量最大，设为$x_m$。
+由图乙中$x>0$部分知，滑块压缩弹簧时的加速度满足
+\[
+a=2-10x.
+\]
+\textbf{思路：} 
+	\emph{由于在全部过程中，动能变化量为$\Delta E = 0$（初末速均为0），由第二问知：物体由A到B(弹簧伸长量为0)点动能等于梯形ABOQ的面积为0.6，所以从B点到弹簧压缩量最大点$X_m$与x轴围成的面积（射线BQ与x轴围成的面积）应为-0.6。
+	}
+	
+从$x=0$到第一次到达最低点，由动能定理可得合外力做功等于动能变化。
+在$a-x$图像中，这对应于图线与$x$轴围成的有向面积乘以质量。
+
+其中，$x=0$到$x=0.2$之间图线在$x$轴上方，围成一个三角形，面积为
+\[
+S_1=\frac12\times 0.2\times 2=0.2.
+\]
+
+$x=0.2$到$x=x_m$之间图线在$x$轴下方，围成一个三角形，面积为
+\[
+S_2=\frac12\times (x_m-0.2)\times (10x_m-2).
+\]
+
+因为此过程末动能为$0$，初动能为$E_\text{k}=0.6\mathrm{J}$，所以合外力做功为
+\[
+W_\text{合}=0-E_\text{k}=-0.6\mathrm{J}.
+\]
+
+又$m=1\mathrm{kg}$，故有
+\[
+S_1-S_2=-0.6.
+\]
+
+即
+\[
+0.2-\frac12(x_m-0.2)(10x_m-2)=-0.6.
+\]
+
+化简得
+\[
+5x_m^2-2x_m-0.6=0.
+\]
+
+整理得
+\[
+x_m=0.6\mathrm{m}
+\]
+（负值舍去）。
+
+故弹簧的最大弹性势能为
+\[
+E_\text{p}=\frac12 kx_m^2=\frac12\times10\times(0.6)^2=1.8\mathrm{J}.
+\]
+\end{enumerate}
+\noindent
+\textbf{最终答案：}
+(1) $\boxed{\mu=0.5}$；(2) $\boxed{E_\text{k}=0.6\mathrm{J}}$；(3) $\boxed{E_\text{p}=1.8\mathrm{J}}$
+
+\end{liti}
+\end{document}

@@ -1,6 +1,6 @@
-This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.10.10)  1 NOV 2025 10:44
+This is XeTeX, Version 3.141592653-2.6-0.999997 (TeX Live 2025) (preloaded format=xelatex 2025.12.21)  21 DEC 2025 22:39
 entering extended mode
- \write18 enabled.
+ restricted \write18 enabled.
  %&-line parsing enabled.
 **G1-Math.tex
 (./G1-Math.tex
@@ -1161,7 +1161,7 @@ Package: enumitem 2025/02/06 v3.11 Customized lists
 \enit@count@id=\count373
 \enitdp@description=\count374
 )
-(./exam-zh-choices.sty
+(d:/texlive/2025/texmf-dist/tex/latex/exam-zh/exam-zh-choices.sty
 Package: exam-zh-choices 2025-02-19 v0.2.5 exam-zh choices module
 \l__examzh_choices_column_sep_dim=\dimen318
 \l__examzh_choices_columns_int=\count375
@@ -1306,8 +1306,8 @@ L3 programming layer <2020/04/10>
  ***********
  ) 
 Here is how much of TeX's memory you used:
- 34345 strings out of 473832
- 778130 string characters out of 5733157
+ 34344 strings out of 473832
+ 778175 string characters out of 5733157
  1430763 words of memory out of 5000000
  56864 multiletter control sequences out of 15000+600000
  563537 words of font info for 92 fonts, out of 8000000 for 9000

@@ -1,0 +1,155 @@
+﻿\NeedsTeXFormat{LaTeX2e}
+\ProvidesPackage{g1math-note}[2026/05/17 Shared note preamble for G1Math]
+
+\RequirePackage{xcolor}
+\RequirePackage{amssymb}
+\RequirePackage{unicode-math}
+\RequirePackage{tikz}
+\RequirePackage{calc}
+\usetikzlibrary{calc,arrows,shadows.blur,tikzmark,patterns,decorations.pathmorphing,arrows.meta}
+\RequirePackage[most]{tcolorbox}
+\tcbuselibrary{breakable,skins,theorems}
+\RequirePackage{xkeyval}
+\RequirePackage{amsmath,amsthm}
+\RequirePackage{enumitem}
+\RequirePackage{graphicx}
+\RequirePackage{float}
+
+\definecolor{GOneAccent}{RGB}{154, 96, 58}
+\definecolor{GOneAccentSoft}{RGB}{238, 227, 214}
+\definecolor{GOnePaper}{RGB}{252, 250, 246}
+\definecolor{GOneLine}{RGB}{126, 112, 98}
+
+\ctexset{
+	section={
+		format+=\raggedright\Large\bfseries\color{GOneAccent!95!black},
+		name={第,节},
+		number=\chinese{section},
+		numberformat=\color{GOneAccent!95!black}\bfseries,
+		aftername=\hspace{0.65em},
+		beforeskip=10pt,
+		afterskip=8pt,
+		fixskip=true,
+	},
+}
+
+\makeatletter
+\tcbset{
+	common/.style={
+		fontupper=\rmfamily,
+		lower separated=true,
+		coltitle=black,
+		colback=GOnePaper,
+		colframe=GOneLine,
+		boxrule=0.55pt,
+		fonttitle=\bfseries,
+		enhanced,
+		breakable,
+		top=9pt,
+		before skip=10pt,
+		after skip=10pt,
+		left=7pt,
+		right=7pt,
+		attach boxed title to top left={yshift=-0.08in,xshift=0.18in},
+		boxed title style={
+			boxrule=0pt,
+			colframe=GOneAccent,
+			colback=GOneAccentSoft,
+			arc=1.5pt,
+			outer arc=1.5pt,
+			left=6pt,
+			right=6pt,
+			top=3pt,
+			bottom=3pt,
+		},
+		separator sign={.},
+		borderline west={1.2pt}{0pt}{GOneAccent!90!black}
+	},
+	litistyle/.style={
+		common,
+		colframe=GOneLine,
+		colback=white,
+		colbacktitle=GOneAccentSoft,
+		sharp corners,
+		rounded corners=southeast,
+		overlay unbroken and last={
+			\node[anchor=south east, outer sep=1.5pt, text=GOneAccent!85!black] at (frame.south east){\footnotesize$\blacksquare$};}
+	},
+	BreakableBox@title/.code n args={2}{
+		\ifblank{#2}
+			{\tcbset{title={\csname #1name\endcsname~\thetcbcounter}}}
+			{\tcbset{title={\csname #1name\endcsname~\thetcbcounter\ (#2)}}}
+	},
+}
+
+\newcommand{\newbreakablebox}[3]{
+	\ifcsundef{#1name}{%
+		\tcbset{BreakableBox@title/.code n args={2}{\tcbset{title={use newcommand define #1name}}} }
+	}{\relax}
+	\DeclareTColorBox[auto counter,number within=section]{#1}{ g o t\label g }{
+		common,
+		#3,
+		IfValueTF={##1}
+			{BreakableBox@title={#1}{##1}}
+			{
+				IfValueTF={##2}
+					{BreakableBox@title={#1}{##2}}
+					{BreakableBox@title={#1}{}}
+			},
+		IfValueT={##4}{
+			IfBooleanTF={##3}
+				{label={##4}}
+				{VIVID@label={#2}{##4}}
+		}
+	}
+	\DeclareTColorBox{#1*}{ g o }{
+		common,#3,
+		IfValueTF={##1}
+			{BreakableBox@title={#1}{##1}}
+			{
+				IfValueTF={##2}
+					{BreakableBox@title={#1}{##2}}
+					{BreakableBox@title={#1}{}}
+			},
+	}
+}
+
+\newcommand{\litiname}{例题}
+\newbreakablebox{liti}{def}{litistyle}
+
+\newfontfamily{\nmfont}{circlenumber}[
+Extension=.otf,
+Path=./fonts/]
+
+\newcommand{\quan}[1]{{\nmfont \symbol{#1}}}
+\newcommand{\kk}[1]{\quan{\numexpr32+#1}}
+\newcommand*\kkctr[1]{%
+	\protect\kk{\number\numexpr\value{#1}\relax}}
+\renewcommand*\thefootnote{\textcolor{black}{\kkctr{footnote}}}
+
+\renewcommand\@makefntext[1]{%
+	\setlength\parindent{2\ccwd}\selectfont
+	\@thefnmark\ #1}
+
+\def\@endpart{%
+	\thispagestyle{empty}
+	\vskip40\p@%
+	\@afterheading}
+
+\setlist{noitemsep}
+\setlist[enumerate,1]{label=\protect\kk{\arabic*},itemsep=0.5ex}
+\makeatother
+
+\newtcolorbox{marker}[1][]{enhanced,before skip=2mm,
+	after skip=3mm,fontupper=\rmfamily,
+	boxrule=0.4pt,left=5mm,right=2mm,top=1mm,bottom=1mm,
+	colback=GOneAccentSoft!75!white,colframe=GOneAccent!50!black,
+	sharp corners,rounded corners=southeast,
+	arc is angular,arc=3mm,underlay={%
+		\path[fill=tcbcolback!80!black] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[draw=tcbcolframe,shorten <=-0.05mm,shorten >=-0.05mm] ([yshift=3mm]interior.south east)--++(-0.4,-0.1)--++(0.1,-0.2);
+		\path[fill=GOneAccent!80!black,draw=none] (interior.south west) rectangle node[white]{\Huge\bfseries !} ([xshift=4mm]interior.north west);
+	},
+	#1
+}
+

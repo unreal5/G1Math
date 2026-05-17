@@ -1,0 +1,423 @@
+\documentclass[a4paper,10pt]{ctexart}
+\usepackage{amsmath,amssymb}
+\usepackage[margin=2cm]{geometry}
+\usepackage{tikz}
+\usetikzlibrary{calc,patterns,decorations.pathmorphing,arrows.meta}
+\usepackage{graphicx}
+\usepackage{float}
+\begin{document}
+\noindent 1. 【2024·山东】如图所示，质量均为$m$的甲、乙两同学，分别坐在水平放置的轻木板上，木板通过一根原长为$l$的轻质弹性绳连接，连接点等高且间距为$d$（$d < l$）。两木板与地面间动摩擦因数均为$\mu$，弹性绳劲度系数为$k$，被拉伸时弹性势能$E_p = \frac{1}{2}kx^2$（$x$为绳的伸长量）。现用水平力$F$缓慢拉动乙所坐木板，直至甲所坐木板刚要离开原位置，此过程中两人与所坐木板保持相对静止，$k$保持不变，最大静摩擦力等于滑动摩擦力，重力加速度大小为$g$，则$F$所做的功等于（\quad）
+\begin{center}
+	
+	
+	\begin{tikzpicture}[>=Stealth,scale=1]
+		% 公共参数
+		\def\blocksize{0.6} % 方块边长
+		\def\springwidth{0.8} % 弹簧宽度
+		\def\groundlength{7} % 地面长度
+		\def\blockmarg{0.1} % 方块与地面间距
+		
+		% ---------------- 第一幅图 ----------------
+		\begin{scope}[yshift=0cm]
+			% 地面
+			\draw[pattern=north east lines] (0,0) rectangle (\groundlength, -0.1);
+			\draw (0,0) -- (\groundlength,0);
+			% 甲、乙方块
+			\draw (0.5,0) rectangle (0.5+\blocksize,\blocksize);
+			\node at (0.5+\blocksize/2,\blocksize+0.2) {$m$};
+			\node at (0.5+\blocksize/2,\blocksize/2) {甲};
+			
+			\draw (0.5+3,0) rectangle (0.5+3+\blocksize,\blocksize);
+			\node at (0.5+3+\blocksize/2,\blocksize+0.2) {$m$};
+			\node at (0.5+3+\blocksize/2,\blocksize/2) {乙};
+			% 弹簧
+			\draw[decorate,decoration={coil,amplitude=\springwidth,segment length=3pt}] 
+			(0.5+\blocksize,\blocksize/2) -- (0.5+3,\blocksize/2) node[midway,above] {$k$};
+			% 距离标注d
+			\draw[|<->|] (0.5+\blocksize+0.1,\blocksize+0.3) -- (0.5+3-0.1,\blocksize+0.3) node[midway,above] {$d$};
+			% 拉力F
+			\draw[->] (0.5+3+\blocksize+0.2,\blocksize/2) -- (0.5+3+\blocksize+1,\blocksize/2) node[right] {$F$};
+			% 摩擦系数μ
+			\node at (\groundlength-0.5,0.2) {$\mu$};
+		\end{scope}
+		
+		% ---------------- 第二幅图（原长） ----------------
+		\begin{scope}[yshift=-2cm]
+			% 甲、乙方块
+			\draw (0.5,0) rectangle (0.5+\blocksize,\blocksize);
+			\node at (0.5+\blocksize/2,\blocksize/2) {甲};
+			
+			\draw (0.5+4,0) rectangle (0.5+4+\blocksize,\blocksize);
+			\node at (0.5+4+\blocksize/2,\blocksize/2) {乙};
+			% 弹簧原长线
+			\draw[decorate,decoration={coil,amplitude=\springwidth,segment length=3pt}]	(0.5+\blocksize,\blocksize/2) -- (0.5+4,\blocksize/2);
+			% 标注原长l
+			\draw[|<->|] (0.5+\blocksize+0.1,\blocksize+0.3) -- (0.5+4-0.1,\blocksize+0.3) node[midway,above] {$l$};
+			\node at (0.5+\blocksize/2+2,\blocksize/2-0.75) {原长};
+			% 拉力F
+			\draw[->] (0.5+4+\blocksize+0.2,\blocksize/2) -- (0.5+4+\blocksize+1,\blocksize/2) node[right] {$F$};
+			% 地面
+			\draw[pattern=north east lines] (0,0) rectangle (\groundlength, -0.1);
+		\end{scope}
+		
+		% ---------------- 第三幅图（刚要离开） ----------------
+		\begin{scope}[yshift=-4cm]
+			% 甲、乙方块
+			\draw (0.5,0) rectangle (0.5+\blocksize,\blocksize);
+			\node at (0.5+\blocksize/2,\blocksize/2) {甲};
+			\node at (0.5+\blocksize/2,-0.5) {刚要离开};
+			
+			\draw (0.5+5,0) rectangle (0.5+5+\blocksize,\blocksize);
+			\node at (0.5+5+\blocksize/2,\blocksize/2) {乙};
+			% 弹簧线
+			\draw[decorate,decoration={coil,amplitude=\springwidth,segment length=3pt}] (0.5+\blocksize,\blocksize/2) -- (0.5+5,\blocksize/2);
+			% 弹性势能公式
+			\node at (3,0.75) {$E_p = \dfrac{1}{2}kx^2$};
+			% 拉力F
+			\draw[->] (0.5+5+\blocksize+0.2,\blocksize/2) -- (0.5+5+\blocksize+1,\blocksize/2) node[right] {$F$};
+			% 地面
+			\draw[pattern=north east lines] (0,0) rectangle (\groundlength, -0.1);
+		\end{scope}
+	\end{tikzpicture}
+\end{center}	
+
+\noindent \textbf{解析：}
+
+设弹性绳的拉力为$T$。
+
+开始时两连接点间距$d<l$，弹性绳处于松弛状态，因此在乙被缓慢拉动的前一段过程中，甲始终不受绳的拉力，乙只需克服摩擦力前进。
+
+当甲所坐木板刚要离开原位置时，甲受到的静摩擦力达到最大值，所以有
+\[
+T=\mu mg.
+\]
+
+由胡克定律可得此时弹性绳的伸长量
+\[
+x=\frac{T}{k}=\frac{\mu mg}{k}.
+\]
+
+乙所坐木板的总位移分两段：
+
+第一段：把两连接点间距从$d$拉到$l$，位移为
+\[
+s_1=l-d.
+\]
+此过程中弹性绳没有拉力，拉力$F$只需平衡乙受到的摩擦力，故
+\[
+F_1=\mu mg.
+\]
+这一段外力做功
+\[
+W_1=F_1s_1=\mu mg(l-d).
+\]
+
+第二段：弹性绳由原长继续伸长$x$。由于过程缓慢，乙始终近似平衡，故任意时刻外力
+\[
+F=\mu mg+T.
+\]
+其中$T$随伸长量从$0$增大到$\mu mg$。
+
+因此第二段外力做功等于克服乙的摩擦力做功与增加弹性势能之和：
+\[
+W_2=\mu mg\cdot x+\frac{1}{2}kx^2.
+\]
+
+代入$x=\dfrac{\mu mg}{k}$，得
+\[
+W_2=\mu mg\cdot \frac{\mu mg}{k}+\frac{1}{2}k\left(\frac{\mu mg}{k}\right)^2
+=\frac{3\mu^2m^2g^2}{2k}.
+\]
+
+所以$F$所做的总功为
+\[
+W=W_1+W_2=\mu mg(l-d)+\frac{3\mu^2m^2g^2}{2k}.
+\]
+
+\noindent \textbf{答案：}
+\[
+\boxed{W=\mu mg(l-d)+\frac{3\mu^2m^2g^2}{2k}}
+\]
+
+
+\noindent 2. 【2024·贵州】质量为1kg的物块静置于光滑水平地面上，设物块静止时的位置为$x$轴零点。现给物块施加一沿$x$轴正方向的水平力$F$，其大小随位置$x$变化的关系如图所示，则物块运动到$x=3\,\text{m}$处，$F$做功的瞬时功率为（\quad）
+
+A. $8\,\text{W}$ \quad B. $16\,\text{W}$ \quad C. $24\,\text{W}$ \quad D. $36\,\text{W}$	
+
+\begin{center}
+	\begin{tikzpicture}[>=stealth,scale=1.2]
+		% 坐标轴
+		\draw[->] (0,0) -- (4,0) node[right] {$x/\text{m}$};
+		\draw[->] (0,0) -- (0,4) node[above] {$F/\text{N}$};
+		% 刻度
+		\foreach \x in {0,1,2,3}
+		\draw (\x,0.1) -- (\x,-0.1) node[below] {$\x$};
+		\foreach \y in {1,2,3}
+		\draw (0.1,\y) -- (-0.1,\y) node[left] {$\y$};
+		% 第一段：0~2m，F=3N
+		\draw[thick] (0,3) -- (2,3);
+		\draw[dashed] (2,0) -- (2,3);
+		% 第二段：2~3m，F=2N
+		\draw[thick] (2,2) -- (3,2);
+		\draw[dashed] (2,2) -- (0,2);
+		\draw[dashed] (3,0) -- (3,2);
+	\end{tikzpicture}
+\end{center}	
+
+\noindent 3.
+
+\noindent 如图甲所示，固定粗糙斜面的倾角为$37^\circ$，与斜面平行的轻弹簧下端固定在$C$处，上端连接质量为$1\mathrm{kg}$的小滑块（视为质点），$BC$为弹簧的原长。现将滑块从$A$处由静止释放，在滑块从释放至第一次到达最低点的过程中，其加速度$a$随弹簧的形变量$x$的变化规律如图乙所示（取沿斜面向下为加速度的正方向），取$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$g=10\mathrm{m/s^2}$。根据上述过程，试求出下列各量：
+
+\begin{enumerate}
+	\item 滑块与斜面间的动摩擦因数$\mu$；
+	\item 当$x=0$时滑块的动能$E_\text{k}$；
+	\item 弹簧的最大弹性势能$E_\text{p}$。
+\end{enumerate}
+
+% 题目配图（图甲：斜面+弹簧+滑块）
+\begin{figure}[H]
+\centering
+\begin{tikzpicture}[>=Stealth,scale=1]
+	% 斜面与地面
+	\coordinate (O) at (0,0);
+	\coordinate (D) at (4,0);
+	\coordinate (S) at (4,3);
+	\draw[thick] (O) -- (D);
+	\draw[thick] (O) -- (S);
+
+	% 倾角标注
+	\draw (1.2,0) arc[start angle=0,end angle=37,radius=1.2];
+	\node at (1.55,0.45) {$37^\circ$};
+
+	% 斜面上的关键点
+	\coordinate (C) at (0,0);
+	\coordinate (B) at (3,2.25);
+	\coordinate (A) at (4,3);
+
+	% 弹簧与滑块
+	\draw[decorate,decoration={coil,segment length=4pt,amplitude=2.4pt}] ($(C)+(0,0.2)$) -- ($(A)+(0,0.2)$);
+	\begin{scope}[shift={(A)},rotate=37]
+		\draw[fill=white] (-0.28,0) rectangle (0.28,0.42);
+	\end{scope}
+
+	% 点与文字标注
+	\fill (A) circle (1.2pt);
+	\fill (B) circle (1.2pt);
+	\fill (C) circle (1.2pt);
+	\node[above left,rotate=37] at ($(A)+(0.2,0.1)$) {$A$};
+	\node[above,rotate=37] at ($(B)+(-0.1,0.3)$) {$B$};
+	\node[below left] at (C) {$C$};
+	\node[right] at ($(A)+(0.35,0.1)$) {滑块};
+
+	% BC 为原长
+	\draw[|<->|] ($(B)+(-0.32,0.43)$) -- ($(C)+(-0.32,0.43)$)
+		node[midway,sloped,above] {$BC$为原长};
+
+	\node at (2.4,-0.7) {图甲};
+\end{tikzpicture}	
+	% 图乙：a-x图像
+	\begin{tikzpicture}[x=10cm,y=1cm,scale=0.5]
+		\coordinate (A) at (0.2,4);
+		\coordinate (B) at (0,2);
+		\coordinate (C) at (0.2,0);
+		\coordinate (D) at (0.6,-4);
+		% 坐标轴
+		\draw[->] (0,-4.5) -- (0,4.5) node[above] {$a\ (\mathrm{m\cdot s^{-2}})$};
+		\draw[->] (-0.1,0) -- (0.7,0) node[right] {$x\ (\mathrm{m})$};
+		% 刻度
+		\foreach \y in {-4,-3,-2,-1,1,2,3,4} {
+			\draw (0.02,\y) -- (-0.02,\y) node[left] {$\y$};
+		}
+		\foreach \x in {0.2,0.4,0.6} {
+			\draw (\x,0.05) -- (\x,-0.05) node[below] {$\x$};
+		}
+		\draw(A)--(B)--(C)--(D);
+		\node at (0.2,-5) {图乙};
+\end{tikzpicture}
+	\caption{图甲：斜面装置；图乙：$a-x$变化规律}
+
+\end{figure}
+
+\noindent \textbf{解析：}
+
+设沿斜面向下为正方向。由图乙可知，当$x=0$时，滑块恰好运动到弹簧原长位置，此时加速度为
+\[
+a=2\,\mathrm{m/s^2}.
+\]
+
+此时弹簧弹力为零，由牛顿第二定律得
+\[
+mg\sin37^\circ-\mu mg\cos37^\circ=ma.
+\]
+
+代入$m=1\,\mathrm{kg}$，$g=10\,\mathrm{m/s^2}$，$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$a=2\,\mathrm{m/s^2}$，得
+\[
+10\times 0.6-\mu\cdot 10\times 0.8=2,
+\]
+\[
+6-8\mu=2,
+\]
+\[
+\mu=0.5.
+\]
+
+再看$x>0$时图像，可得直线经过$(0,2)$与$(0.2,0)$，故
+\[
+a=2-10x.
+\]
+
+而在弹簧被压缩时，有
+\[
+a=g\sin37^\circ-\mu g\cos37^\circ-\frac{kx}{m}=2-kx.
+\]
+
+与图像表达式比较得
+\[
+k=10\,\mathrm{N/m}.
+\]
+
+滑块由$A$运动到$B$（即$x$由$0.2\,\mathrm{m}$减小到$0$）的过程中，初速度为零，设到达$x=0$时动能为$E_\text{k}$。
+
+由动能定理得
+\[
+E_\text{k}=mg\sin37^\circ\cdot 0.2-\mu mg\cos37^\circ\cdot 0.2+\frac{1}{2}k(0.2)^2.
+\]
+
+代入数据得
+\[
+E_\text{k}=6\times 0.2-4\times 0.2+\frac{1}{2}\times 10\times (0.2)^2
+=1.2-0.8+0.2=0.6\,\mathrm{J}.
+\]
+
+设滑块第一次到达最低点时，弹簧压缩量为$x_\text{m}$，此时速度再次为零。
+
+从$x=0$运动到最低点的过程中，由动能定理得
+\[
+0-E_\text{k}=mg\sin37^\circ\cdot x_\text{m}-\mu mg\cos37^\circ\cdot x_\text{m}-\frac{1}{2}kx_\text{m}^2.
+\]
+
+即
+\[
+-0.6=2x_\text{m}-5x_\text{m}^2.
+\]
+
+整理得
+\[
+5x_\text{m}^2-2x_\text{m}-0.6=0.
+\]
+
+解得
+\[
+x_\text{m}=0.6\,\mathrm{m}
+\]
+（负值舍去）。
+
+故弹簧的最大弹性势能为
+\[
+E_\text{p}=\frac{1}{2}kx_\text{m}^2=\frac{1}{2}\times 10\times (0.6)^2=1.8\,\mathrm{J}.
+\]
+
+\noindent \textbf{答案：}
+\[
+\boxed{\mu=0.5}
+\]
+\[
+\boxed{E_\text{k}=0.6\,\mathrm{J}}
+\]
+\[
+\boxed{E_\text{p}=1.8\,\mathrm{J}}
+\]
+
+\newpage
+\textbf{解答（高中方法，无积分）}
+\begin{enumerate}
+	\item 
+\textbf{求滑块与斜面间的动摩擦因数$\mu$}
+
+当$x=0$时，弹簧处于原长，弹力为$0$。
+对滑块沿斜面方向由牛顿第二定律：
+\[
+mg\sin37^\circ - \mu mg\cos37^\circ = ma_0
+\]
+代入$m=1\mathrm{kg}$，$g=10\mathrm{m/s^2}$，$\sin37^\circ=0.6$，$\cos37^\circ=0.8$，$a_0=2\mathrm{m/s^2}$：
+\begin{align*}
+	1\times10\times0.6 - \mu\times1\times10\times0.8 &= 1\times2 \\
+	6 - 8\mu &= 2 \\
+	\mu &= 0.5
+\end{align*}
+
+
+\item 
+\textbf{当$x=0$时滑块的动能$E_\text{k}$}
+
+根据\textbf{动能定理}，合外力做功等于动能变化：$W_\text{合} = \Delta E_\text{k}$。
+合外力$F_\text{合}=ma$，在$a-x$图像中，合外力做功等于$m$乘以$a-x$图线与$x$轴围成的面积（高中面积法）。
+
+从$A$（$x=0.2\mathrm{m}$）到$B$（$x=0$），$a-x$图为梯形：
+上底$a_1=2\mathrm{m/s^2}$，下底$a_2=4\mathrm{m/s^2}$，高$\Delta x=0.2\mathrm{m}$
+\[
+S = \frac{(a_1+a_2)}{2} \cdot \Delta x = \frac{(2+4)}{2} \times 0.2 = 0.6\ \mathrm{m\cdot s^{-2}}
+\]
+合外力做功：
+$
+W_\text{合} = mS = 1\times0.6 = 0.6\ \mathrm{J}
+$
+因滑块从静止释放，初动能为$0$，故$E_\text{k} = W_\text{合} = 0.6\mathrm{J}$。
+
+\item 
+\textbf{求弹簧的最大弹性势能$E_\text{p}$}
+
+当滑块第一次到达最低点时，速度为$0$，弹簧形变量最大，设为$x_m$。
+由图乙中$x>0$部分知，滑块压缩弹簧时的加速度满足
+\[
+a=2-10x.
+\]
+
+从$x=0$到第一次到达最低点，由动能定理可得合外力做功等于动能变化。
+在$a-x$图像中，这对应于图线与$x$轴围成的有向面积乘以质量。
+
+其中，$x=0$到$x=0.2$之间图线在$x$轴上方，围成一个三角形，面积为
+\[
+S_1=\frac12\times 0.2\times 2=0.2.
+\]
+
+$x=0.2$到$x=x_m$之间图线在$x$轴下方，围成一个三角形，面积为
+\[
+S_2=\frac12\times (x_m-0.2)\times (10x_m-2).
+\]
+
+因为此过程末动能为$0$，初动能为$E_\text{k}=0.6\mathrm{J}$，所以合外力做功为
+\[
+W_\text{合}=0-E_\text{k}=-0.6\mathrm{J}.
+\]
+
+又$m=1\mathrm{kg}$，故有
+\[
+S_1-S_2=-0.6.
+\]
+
+即
+\[
+0.2-\frac12(x_m-0.2)(10x_m-2)=-0.6.
+\]
+
+化简得
+\[
+5x_m^2-2x_m-0.6=0.
+\]
+
+整理得
+\[
+x_m=0.6\mathrm{m}
+\]
+（负值舍去）。
+
+故弹簧的最大弹性势能为
+\[
+E_\text{p}=\frac12 kx_m^2=\frac12\times10\times(0.6)^2=1.8\mathrm{J}.
+\]
+\end{enumerate}
+\noindent
+\textbf{最终答案：}
+(1) $\boxed{\mu=0.5}$；(2) $\boxed{E_\text{k}=0.6\mathrm{J}}$；(3) $\boxed{E_\text{p}=1.8\mathrm{J}}$
+\end{document}
